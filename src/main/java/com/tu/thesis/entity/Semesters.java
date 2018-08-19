@@ -8,13 +8,15 @@ public class Semesters {
 
 	@Id
 	private int id;
+	private int year;
 	private String name;
 
 	public Semesters() {
 	}
 
-	public Semesters(int id, String name) {
+	public Semesters(int id, int year, String name) {
 		this.id = id;
+		this.year = year;
 		this.name = name;
 	}
 
@@ -26,6 +28,14 @@ public class Semesters {
 		this.id = id;
 	}
 
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+	
 	public String getName() {
 		return name;
 	}
