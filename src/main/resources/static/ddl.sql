@@ -26,11 +26,10 @@ DROP TABLE UniTime;
 --leads lecturs and exercises are not FK due to 1 row containing all of the subjects lead by this person, should stay this way? 
 CREATE TABLE Teachers(
 	id SERIAL PRIMARY KEY,
-	name VARCHAR(255) NOT NULL,
-	leads_lectures VARCHAR(255),
-	leads_exercises VARCHAR(255)
+	name VARCHAR(255) NOT NULL
 );
 
+DROP TABLE Teachers CASCADE;
 --unavailabe time is varchar but should keep values 1-7 for the time slots in the program; should time slots still be a table?!
 CREATE TABLE Rooms(
 	id INT NOT NULL PRIMARY KEY,
@@ -56,9 +55,18 @@ INSERT INTO UniTimeSlots(id, name) VALUES (1, '7:30-8:15'), (2, '8:30-9:15'), (3
 								(6, '12:30-13:15'), (7, '13:45-14:30'), (8, '14:45-15:30'), (9, '15:45-16:30'), (10, '16:45-17:30'),
 											(11, '17:45-18:30'),(12, '18:45-19:30'), (13, '19:45-20:30'), (14, '20:45-21:30');
 
-INSERT INTO Teachers(name, leads_lectures, leads_exercises) VALUES ('Dragan Draganov', '3, 4, 10', '3, 4, 10'),
-								('Petkan Petkanov', '5, 6, 12, 14', '12, 14'), ('Todor Todorov', null, '9, 12, 14');
+INSERT INTO Teachers(name) VALUES ('Dragan Draganov'),
+								('Petkan Petkanov'), ('Todor Todorov');
 
 INSERT INTO Rooms(id, isLecture) VALUES (1151, true), (1152, true), (1153, true), (1154, true), (1211, false), (1216, false);
 
-DELETE FROM UniTimeSlots;
+
+CREATE TABLE Teachers_Subjects (
+	teachers_id INT NOT NULL REFERENCES Teachers(id),
+	subjects_id INT NOT NULL REFERENCES Subjects(id),
+	isLecture BOOLEAN DEFAULT FALSE,
+	UNIQUE (teachers_id, subjects_id, isLecture)
+);
+
+INSERT INTO Teachers_Subjects (teachers_id, subjects_id, isLecture) VALUES (1, 3, true), (1, 5, true), (2, 3, true), (2, 3, false);
+

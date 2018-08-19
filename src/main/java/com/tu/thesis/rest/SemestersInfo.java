@@ -20,9 +20,10 @@ public class SemestersInfo {
 
 		return SemestersImpl.retrieveAllSemesters();
 	}
-	
+
 	@RequestMapping(value = "/semesters/year", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<Semesters> semesters(@RequestParam("year") int year) throws ClassNotFoundException, SQLException {
+	public @ResponseBody List<Semesters> semesters(@RequestParam("year") int year)
+			throws ClassNotFoundException, SQLException {
 
 		return SemestersImpl.retrieveAllSemestersByYear(year);
 	}

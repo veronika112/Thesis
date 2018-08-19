@@ -35,7 +35,6 @@ public class SubjectsInfo {
 		SubjectsImpl.insertSubjects(subjects);
 	}
 
-	
 	@RequestMapping(value = "/subjects/delete", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody void deleteGWById(@RequestParam("id") int id) throws ClassNotFoundException, SQLException {
 

@@ -35,7 +35,7 @@ public class Semesters {
 	public void setYear(int year) {
 		this.year = year;
 	}
-	
+
 	public String getName() {
 		return name;
 	}

@@ -17,18 +17,17 @@ public class SubjectsImpl {
 	public static List<Subjects> retrieveAllSubjects() throws ClassNotFoundException, SQLException {
 		return sql.retrieveAllSubjects(SQLConstants.GET_ALL_SUBJECTS);
 	}
-	
+
 	public static List<Subjects> retrieveAllSubjectsBySemester(int id) throws ClassNotFoundException, SQLException {
 		return sql.retrieveAllSubjectsBySemester(SQLConstants.GET_ALL_SUBJECTS_BY_SEMESTERS, id);
 	}
-	
+
 	public static void insertSubjects(Subjects subject) throws ClassNotFoundException, SQLException {
 		sql.insertSubject(SQLConstants.INSERT_SUBJECT, subject);
 	}
-	
 
 	public static void deleteSubjects(int id) throws ClassNotFoundException, SQLException {
 		sql.deleteSubject(SQLConstants.DELETE_SUBJECT_BY_ID, id);
 	}
-	
+
 }
