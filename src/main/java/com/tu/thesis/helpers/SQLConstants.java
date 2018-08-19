@@ -10,7 +10,7 @@ public class SQLConstants {
 	public static final String GET_ALL_SUBJECTS= "select * from Subjects;";
 	public static final String GET_ALL_SUBJECTS_BY_SEMESTERS = "select * from Subjects where sem_id = ?;";
 	public static final String DELETE_SUBJECT_BY_ID = "delete from Subjects where id = ?";
-	public static final String INSERT_SUBJECT = "insert into Subjects(sem_id,	name, lectures_num, exercises_num) VALUES (?, ?, ? ?);";
+	public static final String INSERT_SUBJECT = "insert into Subjects(sem_id, name, lectures_num, exercises_num) VALUES (?, ?, ?, ?);";
 	
 	
 	

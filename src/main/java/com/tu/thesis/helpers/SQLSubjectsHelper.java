@@ -39,7 +39,7 @@ public class SQLSubjectsHelper {
 			int id = rs.getInt("id");
 			int semId = rs.getInt("sem_id");
 			String name = rs.getString("name");
-			int lectureNum = rs.getInt("lecture_num");
+			int lectureNum = rs.getInt("lectures_num");
 			int exercisesNum = rs.getInt("exercises_num");
 
 			retrievedSubjects.add(new Subjects(id, semId, name, lectureNum, exercisesNum));
@@ -61,7 +61,7 @@ public class SQLSubjectsHelper {
 			int id = rs.getInt("id");
 			int semId = rs.getInt("sem_id");
 			String name = rs.getString("name");
-			int lectureNum = rs.getInt("lecture_num");
+			int lectureNum = rs.getInt("lectures_num");
 			int exercisesNum = rs.getInt("exercises_num");
 
 			retrievedSubjects.add(new Subjects(id, semId, name, lectureNum, exercisesNum));
@@ -83,7 +83,7 @@ public class SQLSubjectsHelper {
 		preparedStatement.setInt(1, s.getSem_id());
 		preparedStatement.setString(2, s.getName());
 		preparedStatement.setInt(3, s.getLecture_num());
-		preparedStatement.setInt(3, s.getExercises_num());
+		preparedStatement.setInt(4, s.getExercises_num());
 
 		preparedStatement.executeUpdate();
 
