@@ -11,6 +11,12 @@ import com.tu.thesis.entity.UniTimeSlots;
 public class FEObjectForLecureGeneration {
 
 	@Override
+	public String toString() {
+		return "FEObjectForLecureGeneration [room=" + room + ", subject=" + subject + ", teacher=" + teacher
+				+ ", availableTime=" + availableTime + "]\n";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -99,5 +105,7 @@ public class FEObjectForLecureGeneration {
 		this.teacher = teacher;
 		this.availableTime = availableTime;
 	}
+	
+	
 
 }
