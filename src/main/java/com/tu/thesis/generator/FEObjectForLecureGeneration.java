@@ -14,17 +14,29 @@ public class FEObjectForLecureGeneration {
 	private Subjects subject;
 	private Teachers teacher;
 	private Map<DAYS, Set<UniTimeSlots>> availableTime;
+	boolean isSet;
+
+	
 
 	public FEObjectForLecureGeneration(Rooms room, Subjects subject, Teachers teacher,
-			Map<DAYS, Set<UniTimeSlots>> availableTime) {
+			Map<DAYS, Set<UniTimeSlots>> availableTime, boolean isSet) {
 
 		super();
 		this.room = room;
 		this.subject = subject;
 		this.teacher = teacher;
 		this.availableTime = availableTime;
+		this.isSet = isSet;
 	}
 
+	public boolean isSet() {
+		return isSet;
+	}
+
+	public void setSet(boolean isSet) {
+		this.isSet = isSet;
+	}
+	
 	public Rooms getRoom() {
 		return room;
 	}
@@ -58,16 +70,11 @@ public class FEObjectForLecureGeneration {
 	}
 
 	@Override
-	public String toString() {
-		return "FEObjectForLecureGeneration [room=" + room + ", subject=" + subject + ", teacher=" + teacher
-				+ ", availableTime=" + availableTime + "]\n";
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((availableTime == null) ? 0 : availableTime.hashCode());
+		result = prime * result + (isSet ? 1231 : 1237);
 		result = prime * result + ((room == null) ? 0 : room.hashCode());
 		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
 		result = prime * result + ((teacher == null) ? 0 : teacher.hashCode());
@@ -88,6 +95,8 @@ public class FEObjectForLecureGeneration {
 				return false;
 		} else if (!availableTime.equals(other.availableTime))
 			return false;
+		if (isSet != other.isSet)
+			return false;
 		if (room == null) {
 			if (other.room != null)
 				return false;
@@ -105,5 +114,13 @@ public class FEObjectForLecureGeneration {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "FEObjectForLecureGeneration [room=" + room + ", subject=" + subject + ", teacher=" + teacher
+				+ ", availableTime=" + availableTime + ", isSet=" + isSet + "]";
+	}
+
+	
 
 }
