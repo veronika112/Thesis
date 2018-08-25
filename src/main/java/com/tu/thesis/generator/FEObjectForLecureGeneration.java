@@ -10,6 +10,53 @@ import com.tu.thesis.entity.UniTimeSlots;
 
 public class FEObjectForLecureGeneration {
 
+	private Rooms room;
+	private Subjects subject;
+	private Teachers teacher;
+	private Map<DAYS, Set<UniTimeSlots>> availableTime;
+
+	public FEObjectForLecureGeneration(Rooms room, Subjects subject, Teachers teacher,
+			Map<DAYS, Set<UniTimeSlots>> availableTime) {
+
+		super();
+		this.room = room;
+		this.subject = subject;
+		this.teacher = teacher;
+		this.availableTime = availableTime;
+	}
+
+	public Rooms getRoom() {
+		return room;
+	}
+
+	public void setRoom(Rooms room) {
+		this.room = room;
+	}
+
+	public Subjects getSubject() {
+		return subject;
+	}
+
+	public void setSubject(Subjects subject) {
+		this.subject = subject;
+	}
+
+	public Teachers getTeacher() {
+		return teacher;
+	}
+
+	public void setTeacher(Teachers teacher) {
+		this.teacher = teacher;
+	}
+
+	public Map<DAYS, Set<UniTimeSlots>> getAvailableTime() {
+		return availableTime;
+	}
+
+	public void setAvailableTime(Map<DAYS, Set<UniTimeSlots>> availableTime) {
+		this.availableTime = availableTime;
+	}
+
 	@Override
 	public String toString() {
 		return "FEObjectForLecureGeneration [room=" + room + ", subject=" + subject + ", teacher=" + teacher
@@ -58,54 +105,5 @@ public class FEObjectForLecureGeneration {
 			return false;
 		return true;
 	}
-
-	private Rooms room;
-	private Subjects subject;
-	private Teachers teacher;
-	private Map<DAYS, Set<UniTimeSlots>> availableTime;
-
-	public Rooms getRoom() {
-		return room;
-	}
-
-	public void setRoom(Rooms room) {
-		this.room = room;
-	}
-
-	public Subjects getSubject() {
-		return subject;
-	}
-
-	public void setSubject(Subjects subject) {
-		this.subject = subject;
-	}
-
-	public Teachers getTeacher() {
-		return teacher;
-	}
-
-	public void setTeacher(Teachers teacher) {
-		this.teacher = teacher;
-	}
-
-	public Map<DAYS, Set<UniTimeSlots>> getAvailableTime() {
-		return availableTime;
-	}
-
-	public void setAvailableTime(Map<DAYS, Set<UniTimeSlots>> availableTime) {
-		this.availableTime = availableTime;
-	}
-
-	public FEObjectForLecureGeneration(Rooms room, Subjects subject, Teachers teacher,
-			Map<DAYS, Set<UniTimeSlots>> availableTime) {
-
-		super();
-		this.room = room;
-		this.subject = subject;
-		this.teacher = teacher;
-		this.availableTime = availableTime;
-	}
-	
-	
 
 }

@@ -70,9 +70,9 @@ public class GeneratorImpl {
 		evaluateAllTeachersTimesConstraints();
 
 		computeLecturesSchedule(groups);
-		
-		if(!lecturesConstraints.isEmpty()) {
-			
+
+		if (!lecturesConstraints.isEmpty()) {
+
 			tryToReconfigureSchedule(groups);
 		}
 
@@ -83,12 +83,12 @@ public class GeneratorImpl {
 	 */
 	private void tryToReconfigureSchedule(int groups) {
 
-	
-		int numOfTriesToPutLecturesIsOver = 0;
-		while (numOfTriesToPutLecturesIsOver < 10) {
-			System.out.println("TUK LI E PROBLEMA?!" + numOfTriesToPutLecturesIsOver);
-			numOfTriesToPutLecturesIsOver++;
-			List<FEObjectForLecureGeneration> toBeRemovedWhenSet = new ArrayList<FEObjectForLecureGeneration>(); // ako uspeem
+		int numOfTriesToPutLectures = 0;
+		while (numOfTriesToPutLectures < 10) {
+			System.out.println("TUK LI E PROBLEMA?!" + numOfTriesToPutLectures);
+			numOfTriesToPutLectures++;
+			List<FEObjectForLecureGeneration> toBeRemovedWhenSet = new ArrayList<FEObjectForLecureGeneration>(); // ako
+																													// uspeem
 			// da
 			// resetnem
 			// elementa
@@ -109,11 +109,12 @@ public class GeneratorImpl {
 
 						BusinessObject[][] scheduleToday = schedule.get(d);
 
-//						if (numberOfLectures(scheduleToday) < 2) {
-//							// izpulnqwame logikata za dobawqne na lekciq otnowo; sled koeto za razmestwane
-//						} else {
-//							// mojem samo da razmestwame
-//						}
+						// if (numberOfLectures(scheduleToday) < 2) {
+						// // izpulnqwame logikata za dobawqne na lekciq otnowo; sled koeto za
+						// razmestwane
+						// } else {
+						// // mojem samo da razmestwame
+						// }
 
 						Set<UniTimeSlots> timeSlots = tempLeftOver.getAvailableTime().get(d); // chasowete na
 																								// prepodawatelq za edin
@@ -158,49 +159,13 @@ public class GeneratorImpl {
 										// ot ili rawen broi razmenqme gi, kato nowoizkaraniq obekt otiwa w dr
 										// kolekciq
 
-								BusinessObject forSwap = null;
-								boolean flag = true;
-								if (scheduleToday[0][tempId - 1].getSub().getLecture_num() >= sizeOfTempLeftOver) {
-									forSwap = scheduleToday[0][tempId - 1];
-									Iterator<UniTimeSlots> it2 = timeSlots.iterator(); // wsichki time slotowe wzeti ot
-																						// bazata
-									while (it2.hasNext()) {
-										int id = it2.next().getId();
+								swapLectures(scheduleToday[0], tempId, tempLeftOver);
 
-										// dali na prepodawateq chasowete sa swobodni kogato e tozi forSwap predmet
-										for (int v = tempId; v < (tempId + forSwap.getSub().getLecture_num()); v++) {
-											if (v != id) {
-												flag = false;
-												break; // prepodawatelq ne e swoboden w nqkoi ot slotowete - nqma da
-														// prawim razmestwaneto
-											}
-										}
-
-									}
-									if (flag) {
-										for (int v = tempId; v < (tempId + forSwap.getSub().getLecture_num()); v++) {
-											BusinessObject forProceess = scheduleToday[0][v];
-											if (forProceess != null) {
-												forFurtherProcess
-														.add(new FEObjectForLecureGeneration(forProceess.getRoom(),
-																forProceess.getSub(), forProceess.getTeacher(),
-																allTeachers.get(forProceess.getTeacher())));
-											}
-											if (v < (tempId + sizeOfTempLeftOver)) {
-												scheduleToday[0][v] = new BusinessObject(tempLeftOver.getSubject(),
-														tempLeftOver.getRoom(), tempLeftOver.getTeacher());
-
-											} else {
-												scheduleToday[0][v] = null;
-											}
-
-											for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
-																				// edna grupa na wsichki grupi
-												scheduleToday[i][v] = scheduleToday[0][v];
-											}
-										}
-									}
+								for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
+									// edna grupa na wsichki grupi
+									scheduleToday[i] = scheduleToday[0];
 								}
+
 							}
 						}
 					}
@@ -313,7 +278,51 @@ public class GeneratorImpl {
 
 		}
 
-		
+	}
+
+	private BusinessObject[] swapLectures(BusinessObject[] scheduleToday, int tempId,
+			FEObjectForLecureGeneration tempLeftOver) {
+
+		BusinessObject forSwap = null;
+		boolean flag = true;
+		int sizeOfTempLeftOver = tempLeftOver.getSubject().getLecture_num();
+
+		if (scheduleToday[tempId - 1].getSub().getLecture_num() >= sizeOfTempLeftOver) {
+			forSwap = scheduleToday[tempId - 1];
+			Iterator<UniTimeSlots> it2 = timeSlots.iterator(); // wsichki time slotowe wzeti ot
+																// bazata
+			while (it2.hasNext()) {
+				int id = it2.next().getId();
+
+				// dali na prepodawateq chasowete sa swobodni kogato e tozi forSwap predmet
+				for (int v = tempId; v < (tempId + forSwap.getSub().getLecture_num()); v++) {
+					if (v != id) {
+						flag = false;
+						break; // prepodawatelq ne e swoboden w nqkoi ot slotowete - nqma da
+								// prawim razmestwaneto
+					}
+				}
+
+			}
+			if (flag) {
+				for (int v = tempId; v < (tempId + forSwap.getSub().getLecture_num()); v++) {
+					BusinessObject forProceess = scheduleToday[v];
+					if (forProceess != null) {
+						forFurtherProcess
+								.add(new FEObjectForLecureGeneration(forProceess.getRoom(), forProceess.getSub(),
+										forProceess.getTeacher(), allTeachers.get(forProceess.getTeacher())));
+					}
+					if (v < (tempId + sizeOfTempLeftOver)) {
+						scheduleToday[v] = new BusinessObject(tempLeftOver.getSubject(), tempLeftOver.getRoom(),
+								tempLeftOver.getTeacher());
+
+					} else {
+						scheduleToday[v] = null;
+					}
+				}
+			}
+		}
+		return scheduleToday;
 	}
 
 	/**
@@ -358,7 +367,8 @@ public class GeneratorImpl {
 	private BusinessObject[] addEachLectureToSchedule(FEObjectForLecureGeneration o, DAYS d, BusinessObject[] obj,
 			List<FEObjectForLecureGeneration> toBeRemovedWhenSet) {
 
-	//	int desiredRoom = o.getRoom().getId(); // zalata koqto prepodawatelq iska za lekciqta si
+		// int desiredRoom = o.getRoom().getId(); // zalata koqto prepodawatelq iska za
+		// lekciqta si
 		int numberSlotsOfLecture = o.getSubject().getLecture_num(); // za wsqka lekciq kolko sa chasowite
 																	// slotowe
 
