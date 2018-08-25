@@ -18,14 +18,21 @@ import com.tu.thesis.entity.UniTimeSlots;
 public class GeneratorImpl {
 
 	List<UniTimeSlots> timeSlots = OtherImpl.retrieveAllTimeSlots();
-	Map<DAYS, BusinessObject[][]> schedule = new HashMap<>();
 
-	List<FEObjectForLecureGeneration> forFurtherProcess = new ArrayList<>();
+	Map<DAYS, BusinessObject[][]> schedule = new HashMap<>(); // krainiqt sedmichen razpis
 
-	// spisak na ws lektori za semestara
-	List<FEObjectForLecureGeneration> lecturesConstraints = new ArrayList<>();
-	Map<Teachers, Map<DAYS, Set<UniTimeSlots>>> allTeachers = new HashMap<>();
+	List<FEObjectForLecureGeneration> forFurtherProcess = new ArrayList<>(); // struktura, w koiqto pazim wremenno
+																				// izwadenite predmeti pri razmestwane
 
+	List<FEObjectForLecureGeneration> lecturesConstraints = new ArrayList<>(); // polucheniq ot FE spisak na predmeti i
+																				// lektori s tehnite chasowi pretencii
+
+	Map<Teachers, Map<DAYS, Set<UniTimeSlots>>> allTeachers = new HashMap<>(); // spisak ot wsichki lektori s tehnite
+																				// chasowi pretencii
+
+	/**
+	 * popalwame spisaka na prepodawatelite
+	 */
 	public void evaluateAllTeachersTimesConstraints() {
 		for (FEObjectForLecureGeneration l : lecturesConstraints) {
 			allTeachers.put(l.getTeacher(), l.getAvailableTime());
@@ -51,84 +58,37 @@ public class GeneratorImpl {
 		System.out.println("nakraq LECTURES- " + lecturesConstraints.toString());
 	}
 
+	/**
+	 * izwurshwa izchislenieto na lekciite za N na broi grupi
+	 * 
+	 * @param groups
+	 */
 	public void computeSchedule(int groups) {
 
-		lecturesConstraints.addAll(generateConstraints());
+		lecturesConstraints.addAll(generateConstraints()); // dobawqne na danni
 
 		evaluateAllTeachersTimesConstraints();
 
-		// fill in time table for lectures
-		for (DAYS d : DAYS.values()) {
-			System.out.println("PULNIM 1WI PUT I SI BESHE OK - 5 EXECUTIONS");
-			int numOfLecturesToday = 0;
-			BusinessObject[][] obj = new BusinessObject[groups][timeSlots.size()];
-			// obhojdame wseki den i wsqka grupa - namirame se na Nti red
-
-			List<FEObjectForLecureGeneration> toBeRemovedWhenSet = new ArrayList<FEObjectForLecureGeneration>();
-
-			// za wseki constraint, koito imame - namirame podhodqsht time slot
-			LABEL: for (FEObjectForLecureGeneration o : lecturesConstraints) {
-				int desiredRoom = o.getRoom().getId(); // zalata koqto prepodawatelq iska za lekciqta si
-				int numberSlotsOfLecture = o.getSubject().getLecture_num(); // za wsqka lekciq kolko sa chasowite
-																			// slotowe
-
-				Iterator<UniTimeSlots> iter = o.getAvailableTime().get(d).iterator(); // obhojdame chasowete, k sa
-				boolean isThisLectureSEt = false; // swobodni na prepodawatelq
-				while (iter.hasNext() && !isThisLectureSEt) {
-
-					UniTimeSlots tempTimeslot = iter.next();
-					int currTimeSlot = tempTimeslot.getId();
-					int checkSum = 0;
-					if (obj[0][currTimeSlot - 1] == null) { // nqma lekciq po towa wreeme za suotwetnata grupa
-						// prowerqwame w programata napred slotowete dali imame neobhodimite broiki
-						// swobodni slotowe
-						if ((currTimeSlot + numberSlotsOfLecture - 1) <= (timeSlots.size() - 1)) {
-							for (int searchAvalTimeSlots = currTimeSlot; searchAvalTimeSlots < (currTimeSlot
-									+ numberSlotsOfLecture); searchAvalTimeSlots++) {
-								if (obj[0][searchAvalTimeSlots] == null
-										&& o.getAvailableTime().get(d).contains(tempTimeslot)) {
-									checkSum += 1;
-								}
-							}
-
-						}
-						// ako sumata suwpada znachi imame wuzmojnost da slojim chasa
-						if (checkSum == numberSlotsOfLecture) {
-							isThisLectureSEt = true;
-							toBeRemovedWhenSet.add(o);
-							numOfLecturesToday = numOfLecturesToday + 1;
-							BusinessObject reserved = new BusinessObject(o.getSubject(), o.getRoom(), o.getTeacher());
-							for (int searchAvalTimeSlots = (currTimeSlot - 1); searchAvalTimeSlots < (currTimeSlot - 1
-									+ numberSlotsOfLecture); searchAvalTimeSlots++) {
-								for (int i = 0; i < groups; i++) { // towa replikira razpredelenieto za edna grupa na
-																	// wsichki grupi
-									obj[i][searchAvalTimeSlots] = reserved;
-								}
-							}
-
-						}
-					}
-
-				}
-
-				if (numOfLecturesToday > 1)
-					break LABEL;
-
-			}
-
-			for (FEObjectForLecureGeneration rem : toBeRemovedWhenSet) {
-				lecturesConstraints.remove(rem);
-			}
-
-			schedule.put(d, obj);
-
+		computeLecturesSchedule(groups);
+		
+		if(!lecturesConstraints.isEmpty()) {
+			
+			tryToReconfigureSchedule(groups);
 		}
+
+	}
+
+	/**
+	 * zapochwame razmestwaneto na lekciite
+	 */
+	private void tryToReconfigureSchedule(int groups) {
+
+	
 		int numOfTriesToPutLecturesIsOver = 0;
 		while (numOfTriesToPutLecturesIsOver < 10) {
 			System.out.println("TUK LI E PROBLEMA?!" + numOfTriesToPutLecturesIsOver);
 			numOfTriesToPutLecturesIsOver++;
-			List<FEObjectForLecureGeneration> toBeRemovedWhenSet = new ArrayList<FEObjectForLecureGeneration>(); // ako
-			// uspeem
+			List<FEObjectForLecureGeneration> toBeRemovedWhenSet = new ArrayList<FEObjectForLecureGeneration>(); // ako uspeem
 			// da
 			// resetnem
 			// elementa
@@ -144,8 +104,16 @@ public class GeneratorImpl {
 																							// nikade
 					int sizeOfTempLeftOver = tempLeftOver.getSubject().getLecture_num(); // razmera mu
 					int numOfLecturesToday = 0;
+
 					for (DAYS d : DAYS.values()) {
+
 						BusinessObject[][] scheduleToday = schedule.get(d);
+
+//						if (numberOfLectures(scheduleToday) < 2) {
+//							// izpulnqwame logikata za dobawqne na lekciq otnowo; sled koeto za razmestwane
+//						} else {
+//							// mojem samo da razmestwame
+//						}
 
 						Set<UniTimeSlots> timeSlots = tempLeftOver.getAvailableTime().get(d); // chasowete na
 																								// prepodawatelq za edin
@@ -345,6 +313,105 @@ public class GeneratorImpl {
 
 		}
 
+		
+	}
+
+	/**
+	 * purwonachalnoto zapulwane na programata
+	 * 
+	 * 
+	 * @param groups
+	 */
+	private void computeLecturesSchedule(int groups) {
+
+		// fill in time table for lectures
+		for (DAYS d : DAYS.values()) {
+			System.out.println("PULNIM 1WI PUT I SI BESHE OK - 5 EXECUTIONS");
+			int numOfLecturesToday = 0;
+			BusinessObject[][] obj = new BusinessObject[groups][timeSlots.size()]; // obhojdame wseki den i wsqka grupa
+																					// - namirame se na Nti red
+
+			List<FEObjectForLecureGeneration> toBeRemovedWhenSet = new ArrayList<FEObjectForLecureGeneration>();
+
+			// za wseki constraint, koito imame - namirame podhodqsht time slot
+			LABEL: for (FEObjectForLecureGeneration o : lecturesConstraints) {
+
+				obj[0] = addEachLectureToSchedule(o, d, obj[0], toBeRemovedWhenSet);
+
+				if (getNumberOfLecturesForDay(obj) > 1)
+					break LABEL;
+			}
+
+			for (int i = 1; i < groups; i++) { // towa replikira razpredelenieto za edna grupa na wsichki grupi
+				obj[i] = obj[0];
+			}
+
+			for (FEObjectForLecureGeneration rem : toBeRemovedWhenSet) {
+				lecturesConstraints.remove(rem);
+			}
+
+			schedule.put(d, obj);
+
+		}
+	}
+
+	private BusinessObject[] addEachLectureToSchedule(FEObjectForLecureGeneration o, DAYS d, BusinessObject[] obj,
+			List<FEObjectForLecureGeneration> toBeRemovedWhenSet) {
+
+	//	int desiredRoom = o.getRoom().getId(); // zalata koqto prepodawatelq iska za lekciqta si
+		int numberSlotsOfLecture = o.getSubject().getLecture_num(); // za wsqka lekciq kolko sa chasowite
+																	// slotowe
+
+		Iterator<UniTimeSlots> iter = o.getAvailableTime().get(d).iterator(); // obhojdame chasowete, k saswobodni na
+																				// prepodawatelq
+		boolean isThisLectureSEt = false;
+
+		while (iter.hasNext() && !isThisLectureSEt) {
+
+			UniTimeSlots tempTimeslot = iter.next();
+			int currTimeSlot = tempTimeslot.getId();
+			int checkSum = 0;
+			if (obj[currTimeSlot - 1] == null) { // nqma lekciq po towa wreeme za suotwetnata grupa
+				// prowerqwame w programata napred slotowete dali imame neobhodimite broiki
+				// swobodni slotowe
+
+				if ((currTimeSlot + numberSlotsOfLecture - 1) <= (timeSlots.size() - 1)) {
+					for (int searchAvalTimeSlots = currTimeSlot; searchAvalTimeSlots < (currTimeSlot
+							+ numberSlotsOfLecture); searchAvalTimeSlots++) {
+						if (obj[searchAvalTimeSlots] == null && o.getAvailableTime().get(d).contains(tempTimeslot)) {
+							checkSum += 1;
+						}
+					}
+
+				}
+				// ako sumata suwpada znachi imame wuzmojnost da slojim chasa
+				if (checkSum == numberSlotsOfLecture) {
+					isThisLectureSEt = true;
+					toBeRemovedWhenSet.add(o);
+					BusinessObject reserved = new BusinessObject(o.getSubject(), o.getRoom(), o.getTeacher());
+					for (int searchAvalTimeSlots = (currTimeSlot - 1); searchAvalTimeSlots < (currTimeSlot - 1
+							+ numberSlotsOfLecture); searchAvalTimeSlots++) {
+						obj[searchAvalTimeSlots] = reserved;
+					}
+
+				}
+			}
+
+		}
+		return obj;
+
+	}
+
+	private int getNumberOfLecturesForDay(BusinessObject[][] scheduleToday) {
+		Set<String> lectures = new HashSet<>();
+
+		for (int i = 0; i < scheduleToday[0].length; i++) {
+			if (scheduleToday[0][i] != null) {
+				lectures.add(scheduleToday[0][i].getSub().getName());
+			}
+		}
+
+		return lectures.size();
 	}
 
 	private Collection<? extends FEObjectForLecureGeneration> generateConstraints() {
