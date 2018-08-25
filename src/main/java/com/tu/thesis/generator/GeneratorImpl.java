@@ -54,9 +54,9 @@ public class GeneratorImpl {
 			System.out.println("NEW DAY **************8");
 		}
 
-		// System.out.println("nakraq FURTHER PROCCESS- " +
-		// forFurtherProcess.toString());
-		// System.out.println("nakraq LECTURES- " + lecturesConstraints.toString());
+		 System.out.println("nakraq FURTHER PROCCESS- " +
+		 forFurtherProcess.toString());
+		 System.out.println("nakraq LECTURES- " + lecturesConstraints.toString());
 	}
 
 	/**
@@ -100,8 +100,7 @@ public class GeneratorImpl {
 			
 			if (!lecturesConstraints.isEmpty()) {
 				BusinessObject[][] obj = new BusinessObject[groups][timeSlots.size()];
-				for (int i = 0; i < lecturesConstraints.size(); i++) {
-					FEObjectForLecureGeneration tempLeftOver = lecturesConstraints.get(i); // predmeta koito ne e slojen
+					FEObjectForLecureGeneration tempLeftOver = lecturesConstraints.get(0); // predmeta koito ne e slojen
 																							// nikade
 
 					for (DAYS d : DAYS.values()) {
@@ -138,17 +137,15 @@ public class GeneratorImpl {
 
 							for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
 								// edna grupa na wsichki grupi
-								scheduleToday[i] = scheduleToday[0];
+								scheduleToday[p] = scheduleToday[0];
 							}
 						}
-					}
 				}
 
 			} else if (!forFurtherProcess.isEmpty()) {
 
 				BusinessObject[][] obj = new BusinessObject[groups][timeSlots.size()];
-				for (int i = 0; i < forFurtherProcess.size(); i++) {
-					FEObjectForLecureGeneration tempLeftOver = forFurtherProcess.get(i); // predmeta koito ne e slojen
+					FEObjectForLecureGeneration tempLeftOver = forFurtherProcess.get(0); // predmeta koito ne e slojen
 																							// nikade
 					for (DAYS d : DAYS.values()) {
 						BusinessObject[][] scheduleToday = schedule.get(d);
@@ -183,8 +180,6 @@ public class GeneratorImpl {
 									// edna grupa na wsichki grupi
 									scheduleToday[p] = scheduleToday[0];
 								}
-
-							}
 						}
 					}
 				}
@@ -192,6 +187,7 @@ public class GeneratorImpl {
 
 			for (FEObjectForLecureGeneration o : toBeRemovedWhenSet) {
 				lecturesConstraints.remove(o);
+				forFurtherProcess.remove(o);
 
 			}
 
