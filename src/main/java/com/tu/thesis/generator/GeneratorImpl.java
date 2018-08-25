@@ -119,7 +119,7 @@ public class GeneratorImpl {
 
 							if (scheduleToday[0][tempId - 1] == null) {
 
-								if (getNumberOfLecturesForDay(obj[0]) < 2) {
+								if (getNumberOfLecturesForDay(scheduleToday[0]) < 2) {
 
 									isThisLectureSEt = addLectures(scheduleToday[0], tempId, tempLeftOver,
 											toBeRemovedWhenSet, isThisLectureSEt);
@@ -161,7 +161,7 @@ public class GeneratorImpl {
 
 							if (scheduleToday[0][tempId - 1] == null) {
 
-								if (getNumberOfLecturesForDay(obj[0]) < 2) {
+								if (getNumberOfLecturesForDay(scheduleToday[0]) < 2) {
 
 									isThisLectureSEt = addLectures(scheduleToday[0], tempId, tempLeftOver,
 											toBeRemovedWhenSet, isThisLectureSEt);
