@@ -218,24 +218,25 @@ public class GeneratorImpl {
 										}
 									}
 
-								} else { // ako ne e null shte prowerim obekta kolko time slota zaema i ako zaema
-											// poweche
-											// ot ili rawen broi razmenqme gi, kato nowoizkaraniq obekt otiwa w dr
-											// kolekciq
-
-									swapLectures(scheduleToday[0], tempId, tempLeftOver);
-
-							for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
-								// edna grupa na wsichki grupi
-								scheduleToday[i] = scheduleToday[0];
-							}
-
 								}
+							} else { // ako ne e null shte prowerim obekta kolko time slota zaema i ako zaema
+										// poweche
+										// ot ili rawen broi razmenqme gi, kato nowoizkaraniq obekt otiwa w dr
+										// kolekciq
+
+								swapLectures(scheduleToday[0], tempId, tempLeftOver);
+
+								for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
+									// edna grupa na wsichki grupi
+									scheduleToday[i] = scheduleToday[0];
+								}
+
 							}
 						}
 					}
 				}
 			}
+
 			for (FEObjectForLecureGeneration o : toBeRemovedWhenSet) {
 				lecturesConstraints.remove(o);
 
