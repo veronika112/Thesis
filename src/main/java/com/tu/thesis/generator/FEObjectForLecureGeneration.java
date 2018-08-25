@@ -14,7 +14,7 @@ public class FEObjectForLecureGeneration {
 	private Subjects subject;
 	private Teachers teacher;
 	private Map<DAYS, Set<UniTimeSlots>> availableTime;
-	boolean isSet;
+	private boolean isSet;
 
 	
 
@@ -74,7 +74,6 @@ public class FEObjectForLecureGeneration {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((availableTime == null) ? 0 : availableTime.hashCode());
-		result = prime * result + (isSet ? 1231 : 1237);
 		result = prime * result + ((room == null) ? 0 : room.hashCode());
 		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
 		result = prime * result + ((teacher == null) ? 0 : teacher.hashCode());
@@ -94,8 +93,6 @@ public class FEObjectForLecureGeneration {
 			if (other.availableTime != null)
 				return false;
 		} else if (!availableTime.equals(other.availableTime))
-			return false;
-		if (isSet != other.isSet)
 			return false;
 		if (room == null) {
 			if (other.room != null)
