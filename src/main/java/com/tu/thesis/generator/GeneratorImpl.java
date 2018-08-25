@@ -102,8 +102,6 @@ public class GeneratorImpl {
 				for (int i = 0; i < lecturesConstraints.size(); i++) {
 					FEObjectForLecureGeneration tempLeftOver = lecturesConstraints.get(i); // predmeta koito ne e slojen
 																							// nikade
-					int sizeOfTempLeftOver = tempLeftOver.getSubject().getLecture_num(); // razmera mu
-					int numOfLecturesToday = 0;
 
 					for (DAYS d : DAYS.values()) {
 
@@ -125,34 +123,13 @@ public class GeneratorImpl {
 						boolean isThisLectureSEt = false;
 						while (it.hasNext() && !isThisLectureSEt) {
 							int tempId = it.next().getId();
-							int checkSum = 0;
+							
 
-							if (scheduleToday[0][tempId - 1] == null) { // powtarqme logikata ot namestwaneto na
-																		// chasowete
-								if ((tempId - 1 + sizeOfTempLeftOver) < timeSlots.size()) {
-									for (int k = 0; k < (tempId - 1 + sizeOfTempLeftOver); k++) {
-										if (scheduleToday[0][k] == null) {
-											checkSum += 1;
-										}
+							if (scheduleToday[0][tempId - 1] == null) {
 
-									}
-
-									if (checkSum == sizeOfTempLeftOver) {
-										isThisLectureSEt = true;
-										toBeRemovedWhenSet.add(lecturesConstraints.get(i));
-										numOfLecturesToday = numOfLecturesToday + 1;
-										BusinessObject reserved = new BusinessObject(
-												lecturesConstraints.get(i).getSubject(),
-												lecturesConstraints.get(i).getRoom(),
-												lecturesConstraints.get(i).getTeacher());
-										for (int searchAvalTimeSlots = (tempId - 1); searchAvalTimeSlots < (tempId - 1
-												+ sizeOfTempLeftOver); searchAvalTimeSlots++) {
-											for (int p = 0; p < groups; p++) {
-												scheduleToday[p][searchAvalTimeSlots] = reserved;
-											}
-										}
-									}
-								}
+								isThisLectureSEt = addLectures(scheduleToday[0], tempId, tempLeftOver, toBeRemovedWhenSet, isThisLectureSEt);
+								
+								
 
 							} else { // ako ne e null shte prowerim obekta kolko time slota zaema i ako zaema
 										// poweche
@@ -161,11 +138,11 @@ public class GeneratorImpl {
 
 								swapLectures(scheduleToday[0], tempId, tempLeftOver);
 
-								for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
-									// edna grupa na wsichki grupi
-									scheduleToday[i] = scheduleToday[0];
-								}
-
+							}
+							
+							for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
+								// edna grupa na wsichki grupi
+								scheduleToday[i] = scheduleToday[0];
 							}
 						}
 					}
@@ -181,8 +158,7 @@ public class GeneratorImpl {
 					int numOfLecturesToday = 0;
 					for (DAYS d : DAYS.values()) {
 						BusinessObject[][] scheduleToday = schedule.get(d);
-						// List<FEObjectForLecureGeneration> toBeRemovedWhenSet = new
-						// ArrayList<FEObjectForLecureGeneration>();
+						
 						Set<UniTimeSlots> timeSlots = tempLeftOver.getAvailableTime().get(d);
 
 						Iterator<UniTimeSlots> it = timeSlots.iterator(); // iterirame warhu swobodnite chasowe na
@@ -192,33 +168,10 @@ public class GeneratorImpl {
 							int tempId = it.next().getId();
 							int checkSum = 0;
 
-							if (scheduleToday[0][tempId - 1] == null) { // powtarqme logikata ot namestwaneto na
-																		// chasowete
-								if ((tempId - 1 + sizeOfTempLeftOver) < timeSlots.size()) {
-									for (int k = 0; k < (tempId - 1 + sizeOfTempLeftOver); k++) {
-										if (scheduleToday[0][k] == null) {
-											checkSum += 1;
-										}
-
-									}
-
-									if (checkSum == sizeOfTempLeftOver) {
-										isThisLectureSEt = true;
-										toBeRemovedWhenSet.add(forFurtherProcess.get(i));
-										numOfLecturesToday = numOfLecturesToday + 1;
-										BusinessObject reserved = new BusinessObject(
-												forFurtherProcess.get(i).getSubject(),
-												forFurtherProcess.get(i).getRoom(),
-												forFurtherProcess.get(i).getTeacher());
-										for (int searchAvalTimeSlots = (tempId - 1); searchAvalTimeSlots < (tempId - 1
-												+ sizeOfTempLeftOver); searchAvalTimeSlots++) {
-											for (int p = 0; p < groups; p++) {
-												scheduleToday[p][searchAvalTimeSlots] = reserved;
-											}
-										}
-									}
-
-								}
+							if (scheduleToday[0][tempId - 1] == null) {
+								
+								isThisLectureSEt = addLectures(scheduleToday[0], tempId, tempLeftOver, toBeRemovedWhenSet, isThisLectureSEt);
+								
 							} else { // ako ne e null shte prowerim obekta kolko time slota zaema i ako zaema
 										// poweche
 										// ot ili rawen broi razmenqme gi, kato nowoizkaraniq obekt otiwa w dr
@@ -246,6 +199,36 @@ public class GeneratorImpl {
 
 		}
 
+	}
+
+	private boolean addLectures(BusinessObject[] scheduleToday, int tempId, FEObjectForLecureGeneration tempLeftOver, List<FEObjectForLecureGeneration> toBeRemovedWhenSet, boolean isThisLectureSEt) {
+
+		int sizeOfTempLeftOver = tempLeftOver.getSubject().getLecture_num(); // razmera mu
+		int numOfLecturesToday = 0;
+		int checkSum = 0;
+		// powtarqme logikata ot namestwaneto na
+		// chasowete
+		if ((tempId - 1 + sizeOfTempLeftOver) < timeSlots.size()) {
+			for (int k = 0; k < (tempId - 1 + sizeOfTempLeftOver); k++) {
+				if (scheduleToday[k] == null) {
+					checkSum += 1;
+				}
+
+			}
+
+			if (checkSum == sizeOfTempLeftOver) {
+				isThisLectureSEt = true;
+				toBeRemovedWhenSet.add(tempLeftOver);
+				numOfLecturesToday = numOfLecturesToday + 1;
+				BusinessObject reserved = new BusinessObject(tempLeftOver.getSubject(),
+						tempLeftOver.getRoom(), tempLeftOver.getTeacher());
+				for (int searchAvalTimeSlots = (tempId - 1); searchAvalTimeSlots < (tempId - 1
+						+ sizeOfTempLeftOver); searchAvalTimeSlots++) {
+						scheduleToday[searchAvalTimeSlots] = reserved;
+				}
+			}
+		}
+		return isThisLectureSEt;
 	}
 
 	private BusinessObject[] swapLectures(BusinessObject[] scheduleToday, int tempId,
