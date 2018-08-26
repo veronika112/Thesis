@@ -1,5 +1,6 @@
 package com.tu.thesis.generator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import com.tu.thesis.entity.Rooms;
 import com.tu.thesis.entity.Subjects;
 import com.tu.thesis.entity.Teachers;
 import com.tu.thesis.entity.UniTimeSlots;
+import com.tu.thesis.helpers.CSVHelper;
 
 public class GeneratorImpl {
 
@@ -30,10 +32,12 @@ public class GeneratorImpl {
 																				// lektori s tehnite chasowi pretencii
 
 	// izpolzwame za uprajneniq - za wsqka grupa powtarqme logikata za lekciite
-	Map<Integer, List<FEObjectForLecureGeneration>> forFurtherProcessExercises = new HashMap<>(); // struktura, w koiqto pazim
-																						// wremenno izwadenite predmeti pri razmestwane
+	Map<Integer, List<FEObjectForLecureGeneration>> forFurtherProcessExercises = new HashMap<>(); // struktura, w koiqto
+																									// pazim
+	// wremenno izwadenite predmeti pri razmestwane
 
-	Map<Integer, List<FEObjectForLecureGeneration>> constraintsExercises = new HashMap<>(); // polucheniq ot FE spisak na predmeti i
+	Map<Integer, List<FEObjectForLecureGeneration>> constraintsExercises = new HashMap<>(); // polucheniq ot FE spisak
+																							// na predmeti i
 	// lektori s tehnite chasowi pretencii
 
 	Map<Teachers, Map<DAYS, Set<UniTimeSlots>>> allTeachers = new HashMap<>(); // spisak ot wsichki lektori s tehnite
@@ -55,7 +59,8 @@ public class GeneratorImpl {
 				for (int j = 0; j < bo[i].length; j++) {
 
 					if (bo[i][j] != null) {
-						System.out.println("CHAS: " + timeSlots.get(j).getName() + ", LEKCIQ: " +bo[i][j].isLecture() + "   "+ bo[i][j].toString());
+						System.out.println("CHAS: " + timeSlots.get(j).getName() + ", LEKCIQ: " + bo[i][j].isLecture()
+								+ "   " + bo[i][j].toString());
 					}
 				}
 				System.out.println("--");
@@ -71,12 +76,13 @@ public class GeneratorImpl {
 	 * izwurshwa izchislenieto na lekciite za N na broi grupi
 	 * 
 	 * @param groups
+	 * @throws IOException
 	 */
-	public void computeSchedule(int groups) {
+	public void computeSchedule(int groups) throws IOException {
 
 		constraintsLectures.addAll(generateConstraints()); // dobawqne na danni
 		// pulnim uprajneniqta za wsqka grupa
-		for(int i=0; i<groups; i++) {
+		for (int i = 0; i < groups; i++) {
 			constraintsExercises.put(i, generateConstraints());
 		}
 		evaluateAllTeachersTimesConstraints();
@@ -90,6 +96,7 @@ public class GeneratorImpl {
 		// razpredelqne na uprajneniq
 		computeExercisesSchedule(groups);
 
+			CSVHelper.exportDataToExcel("C:\\Users\\User\\Desktop\\program.xlsx", schedule);
 	}
 
 	/**
@@ -117,12 +124,11 @@ public class GeneratorImpl {
 						break LABEL;
 				}
 
-
 				for (FEObjectForLecureGeneration rem : toBeRemovedWhenSet) {
 					constraintsExercises.get(i).remove(rem);
 				}
 
-			//	schedule.put(d, obj);
+				// schedule.put(d, obj);
 			}
 		}
 	}
@@ -377,16 +383,17 @@ public class GeneratorImpl {
 
 	private BusinessObject[] addEachLectureToSchedule(FEObjectForLecureGeneration o, DAYS d, BusinessObject[] obj,
 			List<FEObjectForLecureGeneration> toBeRemovedWhenSet, boolean isLecture) {
-		
-		// int desiredRoom = o.getRoom().getId(); // zalata koqto prepodawatelq iska za lekciqta si
+
+		// int desiredRoom = o.getRoom().getId(); // zalata koqto prepodawatelq iska za
+		// lekciqta si
 		int numberSlots = 0;
-		
-		if(isLecture == true) {
+
+		if (isLecture == true) {
 			numberSlots = o.getSubject().getLecture_num(); // za wsqka lekciq kolko sa chasowite slotowe
 		} else {
 			numberSlots = o.getSubject().getExercises_num(); // za wsqko uprajnenie kolko sa chasowite slotowe
 		}
-	
+
 		Iterator<UniTimeSlots> iter = o.getAvailableTime().get(d).iterator(); // obhojdame chasowete, k saswobodni na
 																				// prepodawatelq
 		boolean isThisLectureSEt = false;
@@ -412,11 +419,10 @@ public class GeneratorImpl {
 				// ako sumata suwpada znachi imame wuzmojnost da slojim chasa
 				if (checkSum == numberSlots) {
 					isThisLectureSEt = true;
-					
-					
-					
+
 					toBeRemovedWhenSet.add(o);
-					BusinessObject reserved = new BusinessObject(o.getSubject(), o.getRoom(), o.getTeacher(), isLecture);
+					BusinessObject reserved = new BusinessObject(o.getSubject(), o.getRoom(), o.getTeacher(),
+							isLecture);
 					for (int searchAvalTimeSlots = (currTimeSlot - 1); searchAvalTimeSlots < (currTimeSlot - 1
 							+ numberSlots); searchAvalTimeSlots++) {
 						obj[searchAvalTimeSlots] = reserved;
@@ -434,14 +440,14 @@ public class GeneratorImpl {
 		Set<String> lectures = new HashSet<>();
 
 		for (int i = 0; i < scheduleToday.length; i++) {
-			if (scheduleToday[i] != null && scheduleToday[i].isLecture()) { 
+			if (scheduleToday[i] != null && scheduleToday[i].isLecture()) {
 				lectures.add(scheduleToday[i].getSub().getName());
 			}
 		}
 
 		return lectures.size();
 	}
-	
+
 	private int getNumberOfExercisesForDay(BusinessObject[] scheduleToday) {
 		Set<String> lectures = new HashSet<>();
 
