@@ -32,7 +32,7 @@ public class CSVHelper {
 	public static void exportDataToExcel(String fileName, Map<DAYS, BusinessObject[][]> schedule) throws IOException {
 
 		Map<DAYS, BusinessObject[][]> theMap = new TreeMap<>(schedule);
-		
+
 		List<UniTimeSlots> timeSlots = OtherImpl.retrieveAllTimeSlots();
 		timeSlots.add(0, new UniTimeSlots(20, "    "));
 
@@ -54,65 +54,75 @@ public class CSVHelper {
 
 		int counter = 0;
 
-		for(DAYS d: theMap.keySet()) {
-					
+		for (DAYS d : theMap.keySet()) {
+
 			Row rowD = sheet.createRow((short) counter);
-			
-			//sheet.addMergedRegion(new CellRangeAddress(counter,counter,0,14));
-			
+
+			// sheet.addMergedRegion(new CellRangeAddress(counter,counter,0,14));
+
 			Cell cellDay = rowD.createCell((short) 1);
 			Font fontDays = workbook.createFont();
 			fontDays.setBold(true);
 			fontDays.setFontHeightInPoints((short) 12);
 			fontDays.setColor(IndexedColors.SEA_GREEN.getIndex());
-			
+
 			CellStyle daysCellStyle = workbook.createCellStyle();
 			daysCellStyle.setFont(fontDays);
 			cellDay.setCellValue(d.toString());
 			cellDay.setCellStyle(daysCellStyle);
-			
-			
-					
+
 			counter++;
-			
-		// Create a Row
-		Row headerRow = sheet.createRow(counter);
-			
-		// Create cells
-		for (int i = 0; i < timeSlots.size(); i++) {
-			Cell cell = headerRow.createCell(i);
-			cell.setCellValue(timeSlots.get(i).getName());
-			cell.setCellStyle(headerCellStyle);
-		}
 
-		// Resize all columns to fit the content size
-		for (int i = 0; i < timeSlots.size(); i++) {
-			sheet.autoSizeColumn(i);
-		}
+			// Create a Row
+			Row headerRow = sheet.createRow(counter);
 
-		counter ++;
-		int rowNum = counter;
-		Row row = sheet.createRow((short) rowNum);
-				
-		for (int i = 0; i < theMap.get(d).length; i++) {
-
-			row = sheet.createRow(rowNum);
-			
-			for (int j = 0; j < theMap.get(d)[i].length; j++) {
-
-				String value = "";
-				if (theMap.get(d)[i][j] != null && theMap.get(d)[i][j].getSub() != null) {
-					value = theMap.get(d)[i][j].getSub().getName();
-				}
-				
-				row.createCell(0).setCellValue(i);
-				row.createCell(j+1).setCellValue(value);
-
+			// Create cells
+			for (int i = 0; i < timeSlots.size(); i++) {
+				Cell cell = headerRow.createCell(i);
+				cell.setCellValue(timeSlots.get(i).getName());
+				cell.setCellStyle(headerCellStyle);
 			}
 
-			rowNum++;
-		}
-		counter = rowNum;
+			// Resize all columns to fit the content size
+			for (int i = 0; i < timeSlots.size(); i++) {
+				sheet.autoSizeColumn(i);
+			}
+
+			counter++;
+			int rowNum = counter;
+			Row row = sheet.createRow((short) rowNum);
+			row.setHeightInPoints((2*sheet.getDefaultRowHeightInPoints()));
+			for (int i = 0; i < theMap.get(d).length; i++) {
+
+				row = sheet.createRow(rowNum);
+
+				for (int j = 0; j < theMap.get(d)[i].length; j++) {
+
+					String value = "";
+					if (theMap.get(d)[i][j] != null && theMap.get(d)[i][j].getSub() != null) {
+						value = theMap.get(d)[i][j].getSub().getName();
+						if (theMap.get(d)[i][j].isLecture()) {
+							value += " (л)";
+						} else {
+							value += " (у)";
+						}
+					}
+
+					row.createCell(0).setCellValue(i);
+					Cell cell = row.createCell(j + 1);
+					
+					 CellStyle cs = workbook.createCellStyle();
+					 cs.setWrapText(true);
+					 cell.setCellStyle(cs);
+					 cell.setCellValue(value);
+					 
+					// row.createCell(j + 1).setCellValue(value);
+					
+				}
+
+				rowNum++;
+			}
+			counter = rowNum;
 		}
 
 		// Write the output to a file
