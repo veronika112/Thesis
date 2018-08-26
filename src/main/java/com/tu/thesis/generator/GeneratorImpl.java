@@ -2,7 +2,6 @@ package com.tu.thesis.generator;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -192,7 +191,17 @@ public class GeneratorImpl {
 
 						for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
 							// edna grupa na wsichki grupi
-							scheduleToday[p] = scheduleToday[0];
+						//	scheduleToday[p] = scheduleToday[0];
+							
+							for (int x = 0; x < scheduleToday[0].length; x++) {
+                                if (scheduleToday[0][x] != null) {
+                                    BusinessObject temp = new BusinessObject(scheduleToday[0][x].getSub(), scheduleToday[0][x].getRoom(), scheduleToday[0][x].getTeacher(), scheduleToday[0][x].isLecture());
+                                    scheduleToday[p][x] = temp;
+                                    temp = null;
+                                } else {
+                                    scheduleToday[p][x] = null;
+                                }
+                            }
 						}
 					}
 				}
@@ -234,7 +243,16 @@ public class GeneratorImpl {
 
 							for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
 								// edna grupa na wsichki grupi
-								scheduleToday[p] = scheduleToday[0];
+								
+								for (int x = 0; x < scheduleToday[0].length; x++) {
+	                                if (scheduleToday[0][x] != null) {
+	                                    BusinessObject temp = new BusinessObject(scheduleToday[0][x].getSub(), scheduleToday[0][x].getRoom(), scheduleToday[0][x].getTeacher(), scheduleToday[0][x].isLecture());
+	                                    scheduleToday[p][x] = temp;
+	                                    temp = null;
+	                                } else {
+	                                    scheduleToday[p][x] = null;
+	                                }
+	                            }
 							}
 						}
 					}
@@ -369,7 +387,18 @@ public class GeneratorImpl {
 			}
 
 			for (int i = 1; i < groups; i++) { // towa replikira razpredelenieto za edna grupa na wsichki grupi
-				obj[i] = obj[0];
+					// edna grupa na wsichki grupi
+				//	scheduleToday[p] = scheduleToday[0];
+					
+					for (int x = 0; x < obj[0].length; x++) {
+                        if (obj[0][x] != null) {
+                            BusinessObject temp = new BusinessObject(obj[0][x].getSub(), obj[0][x].getRoom(), obj[0][x].getTeacher(), obj[0][x].isLecture());
+                            obj[i][x] = temp;
+                            temp = null;
+                        } else {
+                            obj[i][x] = null;
+                        }
+				}
 			}
 
 			for (FEObjectForLecureGeneration rem : toBeRemovedWhenSet) {
