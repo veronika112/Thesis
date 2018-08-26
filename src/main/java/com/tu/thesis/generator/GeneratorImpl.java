@@ -104,14 +104,13 @@ public class GeneratorImpl {
 			// fill in time table for lectures
 			for (DAYS d : DAYS.values()) {
 				System.out.println("PULNIM 1WI PUT I SI BESHE OK - 5 EXECUTIONS");
-				int numOfExercisesToday = 0;
 				BusinessObject[][] currentProgram = schedule.get(d); // programata do tekushtiq moment
 
 				List<FEObjectForLecureGeneration> toBeRemovedWhenSet = new ArrayList<FEObjectForLecureGeneration>();
 
 				// za wseki constraint, koito imame - namirame podhodqsht time slot
 				LABEL: for (FEObjectForLecureGeneration o : constraintsExercises.get(i)) {
-
+					System.out.println("PREDMETI: " + o.getSubject().getName());
 					currentProgram[i] = addEachLectureToSchedule(o, d, currentProgram[i], toBeRemovedWhenSet, false);
 
 					if (getNumberOfExercisesForDay(currentProgram[i]) > 1)
@@ -123,7 +122,7 @@ public class GeneratorImpl {
 					constraintsExercises.get(i).remove(rem);
 				}
 
-	//			schedule.put(d, obj);
+			//	schedule.put(d, obj);
 			}
 		}
 	}
@@ -378,12 +377,16 @@ public class GeneratorImpl {
 
 	private BusinessObject[] addEachLectureToSchedule(FEObjectForLecureGeneration o, DAYS d, BusinessObject[] obj,
 			List<FEObjectForLecureGeneration> toBeRemovedWhenSet, boolean isLecture) {
-
-		// int desiredRoom = o.getRoom().getId(); // zalata koqto prepodawatelq iska za
-		// lekciqta si
-		int numberSlotsOfLecture = o.getSubject().getLecture_num(); // za wsqka lekciq kolko sa chasowite
-																	// slotowe
-
+		
+		// int desiredRoom = o.getRoom().getId(); // zalata koqto prepodawatelq iska za lekciqta si
+		int numberSlots = 0;
+		
+		if(isLecture == true) {
+			numberSlots = o.getSubject().getLecture_num(); // za wsqka lekciq kolko sa chasowite slotowe
+		} else {
+			numberSlots = o.getSubject().getExercises_num(); // za wsqko uprajnenie kolko sa chasowite slotowe
+		}
+	
 		Iterator<UniTimeSlots> iter = o.getAvailableTime().get(d).iterator(); // obhojdame chasowete, k saswobodni na
 																				// prepodawatelq
 		boolean isThisLectureSEt = false;
@@ -397,9 +400,9 @@ public class GeneratorImpl {
 				// prowerqwame w programata napred slotowete dali imame neobhodimite broiki
 				// swobodni slotowe
 
-				if ((currTimeSlot + numberSlotsOfLecture - 1) <= (timeSlots.size() - 1)) {
+				if ((currTimeSlot + numberSlots - 1) <= (timeSlots.size() - 1)) {
 					for (int searchAvalTimeSlots = currTimeSlot; searchAvalTimeSlots < (currTimeSlot
-							+ numberSlotsOfLecture); searchAvalTimeSlots++) {
+							+ numberSlots); searchAvalTimeSlots++) {
 						if (obj[searchAvalTimeSlots] == null && o.getAvailableTime().get(d).contains(tempTimeslot)) {
 							checkSum += 1;
 						}
@@ -407,12 +410,15 @@ public class GeneratorImpl {
 
 				}
 				// ako sumata suwpada znachi imame wuzmojnost da slojim chasa
-				if (checkSum == numberSlotsOfLecture) {
+				if (checkSum == numberSlots) {
 					isThisLectureSEt = true;
+					
+					
+					
 					toBeRemovedWhenSet.add(o);
 					BusinessObject reserved = new BusinessObject(o.getSubject(), o.getRoom(), o.getTeacher(), isLecture);
 					for (int searchAvalTimeSlots = (currTimeSlot - 1); searchAvalTimeSlots < (currTimeSlot - 1
-							+ numberSlotsOfLecture); searchAvalTimeSlots++) {
+							+ numberSlots); searchAvalTimeSlots++) {
 						obj[searchAvalTimeSlots] = reserved;
 					}
 
