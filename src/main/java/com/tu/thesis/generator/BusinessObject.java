@@ -9,7 +9,16 @@ public class BusinessObject {
 	private Subjects sub;
 	private Rooms room;
 	private Teachers teacher;
+	private boolean isLecture;
 	
+	public boolean isLecture() {
+		return isLecture;
+	}
+
+	public void setLecture(boolean isLecture) {
+		this.isLecture = isLecture;
+	}
+
 	public BusinessObject() {}
 	
 	public BusinessObject(Subjects sub, Rooms room, Teachers teacher) {
@@ -18,6 +27,15 @@ public class BusinessObject {
 		this.room = room;
 		this.teacher = teacher;
 	}
+	
+	public BusinessObject(Subjects sub, Rooms room, Teachers teacher, boolean isLecture) {
+		super();
+		this.sub = sub;
+		this.room = room;
+		this.teacher = teacher;
+		this.isLecture = isLecture;
+	} 
+	
 	public Subjects getSub() {
 		return sub;
 	}
@@ -41,6 +59,7 @@ public class BusinessObject {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (isLecture ? 1231 : 1237);
 		result = prime * result + ((room == null) ? 0 : room.hashCode());
 		result = prime * result + ((sub == null) ? 0 : sub.hashCode());
 		result = prime * result + ((teacher == null) ? 0 : teacher.hashCode());
@@ -56,6 +75,8 @@ public class BusinessObject {
 		if (getClass() != obj.getClass())
 			return false;
 		BusinessObject other = (BusinessObject) obj;
+		if (isLecture != other.isLecture)
+			return false;
 		if (room == null) {
 			if (other.room != null)
 				return false;
@@ -76,8 +97,10 @@ public class BusinessObject {
 
 	@Override
 	public String toString() {
-		return "BusinessObject [getSub()=" + getSub() + ", getRoom()=" + getRoom() + ", getTeacher()=" + getTeacher()
+		return "BusinessObject [sub=" + sub + ", room=" + room + ", teacher=" + teacher + ", isLecture=" + isLecture
 				+ "]";
 	}
+
+	
 
 }

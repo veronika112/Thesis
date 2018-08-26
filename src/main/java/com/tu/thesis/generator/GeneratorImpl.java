@@ -21,11 +21,20 @@ public class GeneratorImpl {
 
 	Map<DAYS, BusinessObject[][]> schedule = new HashMap<>(); // krainiqt sedmichen razpis
 
-	List<FEObjectForLecureGeneration> forFurtherProcess = new ArrayList<>(); // struktura, w koiqto pazim wremenno
-																				// izwadenite predmeti pri razmestwane
+	// s tezi 2 lista durjim lekciite, doakto gi obrabotwame
+	List<FEObjectForLecureGeneration> forFurtherProcessLectures = new ArrayList<>(); // struktura, w koiqto pazim
+																						// wremenno
+	// izwadenite predmeti pri razmestwane
 
-	List<FEObjectForLecureGeneration> lecturesConstraints = new ArrayList<>(); // polucheniq ot FE spisak na predmeti i
+	List<FEObjectForLecureGeneration> constraintsLectures = new ArrayList<>(); // polucheniq ot FE spisak na predmeti i
 																				// lektori s tehnite chasowi pretencii
+
+	// izpolzwame za uprajneniq - za wsqka grupa powtarqme logikata za lekciite
+	Map<Integer, List<FEObjectForLecureGeneration>> forFurtherProcessExercises = new HashMap<>(); // struktura, w koiqto pazim
+																						// wremenno izwadenite predmeti pri razmestwane
+
+	Map<Integer, List<FEObjectForLecureGeneration>> constraintsExercises = new HashMap<>(); // polucheniq ot FE spisak na predmeti i
+	// lektori s tehnite chasowi pretencii
 
 	Map<Teachers, Map<DAYS, Set<UniTimeSlots>>> allTeachers = new HashMap<>(); // spisak ot wsichki lektori s tehnite
 																				// chasowi pretencii
@@ -34,7 +43,7 @@ public class GeneratorImpl {
 	 * popalwame spisaka na prepodawatelite
 	 */
 	public void evaluateAllTeachersTimesConstraints() {
-		for (FEObjectForLecureGeneration l : lecturesConstraints) {
+		for (FEObjectForLecureGeneration l : constraintsLectures) {
 			allTeachers.put(l.getTeacher(), l.getAvailableTime());
 		}
 	}
@@ -46,7 +55,7 @@ public class GeneratorImpl {
 				for (int j = 0; j < bo[i].length; j++) {
 
 					if (bo[i][j] != null) {
-						System.out.println("CHAS: " + timeSlots.get(j).getName() + ", " + bo[i][j].toString());
+						System.out.println("CHAS: " + timeSlots.get(j).getName() + ", LEKCIQ: " +bo[i][j].isLecture() + "   "+ bo[i][j].toString());
 					}
 				}
 				System.out.println("--");
@@ -54,9 +63,8 @@ public class GeneratorImpl {
 			System.out.println("NEW DAY **************8");
 		}
 
-		 System.out.println("nakraq FURTHER PROCCESS- " +
-		 forFurtherProcess.toString());
-		 System.out.println("nakraq LECTURES- " + lecturesConstraints.toString());
+		System.out.println("nakraq FURTHER PROCCESS- " + forFurtherProcessLectures.toString());
+		System.out.println("nakraq LECTURES- " + constraintsLectures.toString());
 	}
 
 	/**
@@ -66,16 +74,58 @@ public class GeneratorImpl {
 	 */
 	public void computeSchedule(int groups) {
 
-		lecturesConstraints.addAll(generateConstraints()); // dobawqne na danni
-
+		constraintsLectures.addAll(generateConstraints()); // dobawqne na danni
+		// pulnim uprajneniqta za wsqka grupa
+		for(int i=0; i<groups; i++) {
+			constraintsExercises.put(i, generateConstraints());
+		}
 		evaluateAllTeachersTimesConstraints();
 
+		// razpredelqne na lekcii
 		computeLecturesSchedule(groups);
-
-		if (!lecturesConstraints.isEmpty()) {
+		if (!constraintsLectures.isEmpty()) {
 			tryToReconfigureSchedule(groups);
 		}
 
+		// razpredelqne na uprajneniq
+		computeExercisesSchedule(groups);
+
+	}
+
+	/**
+	 * purwonachalnoto zapulwane na programata za uprajneniq
+	 * 
+	 * 
+	 * @param groups
+	 */
+	private void computeExercisesSchedule(int groups) {
+
+		for (int i = 0; i < groups; i++) {
+			// fill in time table for lectures
+			for (DAYS d : DAYS.values()) {
+				System.out.println("PULNIM 1WI PUT I SI BESHE OK - 5 EXECUTIONS");
+				int numOfExercisesToday = 0;
+				BusinessObject[][] currentProgram = schedule.get(d); // programata do tekushtiq moment
+
+				List<FEObjectForLecureGeneration> toBeRemovedWhenSet = new ArrayList<FEObjectForLecureGeneration>();
+
+				// za wseki constraint, koito imame - namirame podhodqsht time slot
+				LABEL: for (FEObjectForLecureGeneration o : constraintsExercises.get(i)) {
+
+					currentProgram[i] = addEachLectureToSchedule(o, d, currentProgram[i], toBeRemovedWhenSet, false);
+
+					if (getNumberOfExercisesForDay(currentProgram[i]) > 1)
+						break LABEL;
+				}
+
+
+				for (FEObjectForLecureGeneration rem : toBeRemovedWhenSet) {
+					constraintsExercises.get(i).remove(rem);
+				}
+
+	//			schedule.put(d, obj);
+			}
+		}
 	}
 
 	/**
@@ -97,97 +147,98 @@ public class GeneratorImpl {
 			// go
 			// tuk
 			// razmestwane ako ostane nqkoq lekciq na kraq na sedmicata
-			
-			if (!lecturesConstraints.isEmpty()) {
+
+			if (!constraintsLectures.isEmpty()) {
 				BusinessObject[][] obj = new BusinessObject[groups][timeSlots.size()];
-					FEObjectForLecureGeneration tempLeftOver = lecturesConstraints.get(0); // predmeta koito ne e slojen
-																							// nikade
+				FEObjectForLecureGeneration tempLeftOver = constraintsLectures.get(0); // predmeta koito ne e slojen
+																						// nikade
 
-					for (DAYS d : DAYS.values()) {
+				for (DAYS d : DAYS.values()) {
 
-						BusinessObject[][] scheduleToday = schedule.get(d);
+					BusinessObject[][] scheduleToday = schedule.get(d);
 
-						Set<UniTimeSlots> timeSlots = tempLeftOver.getAvailableTime().get(d); // chasowete na
-																								// prepodawatelq za edin
-																								// den
+					Set<UniTimeSlots> timeSlots = tempLeftOver.getAvailableTime().get(d); // chasowete na
+																							// prepodawatelq za edin
+																							// den
 
-						Iterator<UniTimeSlots> it = timeSlots.iterator(); // iterirame warhu swobodnite chasowe na
-																			// prepodawatelite samo
-						boolean isThisLectureSEt = false;
-						while (it.hasNext() && !isThisLectureSEt) {
-							int tempId = it.next().getId();
+					Iterator<UniTimeSlots> it = timeSlots.iterator(); // iterirame warhu swobodnite chasowe na
+																		// prepodawatelite samo
+					boolean isThisLectureSEt = false;
+					while (it.hasNext() && !isThisLectureSEt) {
+						int tempId = it.next().getId();
 
-							if (scheduleToday[0][tempId - 1] == null) {
+						if (scheduleToday[0][tempId - 1] == null) {
 
-								if (getNumberOfLecturesForDay(scheduleToday[0]) < 2) {
+							if (getNumberOfLecturesForDay(scheduleToday[0]) < 2) {
 
-									isThisLectureSEt = addLectures(scheduleToday[0], tempId, tempLeftOver,
-											toBeRemovedWhenSet, isThisLectureSEt);
-								}
-							} else { // ako ne e null shte prowerim obekta kolko time slota zaema i ako zaema
-										// poweche
-										// ot ili rawen broi razmenqme gi, kato nowoizkaraniq obekt otiwa w dr
-										// kolekciq
+								isThisLectureSEt = addLectures(scheduleToday[0], tempId, tempLeftOver,
+										toBeRemovedWhenSet, isThisLectureSEt);
+							}
+						} else { // ako ne e null shte prowerim obekta kolko time slota zaema i ako zaema
+									// poweche
+									// ot ili rawen broi razmenqme gi, kato nowoizkaraniq obekt otiwa w dr
+									// kolekciq
 
-								System.out.println("Swap ot lecturesConstraints");
-								isThisLectureSEt = swapLectures(scheduleToday[0], tempId, tempLeftOver, d,
+							System.out.println("Swap ot lecturesConstraints");
+							isThisLectureSEt = swapLectures(scheduleToday[0], tempId, tempLeftOver, d,
+									toBeRemovedWhenSet, isThisLectureSEt);
+
+						}
+
+						for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
+							// edna grupa na wsichki grupi
+							scheduleToday[p] = scheduleToday[0];
+						}
+					}
+				}
+
+			} else if (!forFurtherProcessLectures.isEmpty()) {
+
+				BusinessObject[][] obj = new BusinessObject[groups][timeSlots.size()];
+				FEObjectForLecureGeneration tempLeftOver = forFurtherProcessLectures.get(0); // predmeta koito ne e
+																								// slojen
+				// nikade
+				for (DAYS d : DAYS.values()) {
+					BusinessObject[][] scheduleToday = schedule.get(d);
+
+					Set<UniTimeSlots> timeSlots = tempLeftOver.getAvailableTime().get(d);
+
+					Iterator<UniTimeSlots> it = timeSlots.iterator(); // iterirame warhu swobodnite chasowe na
+																		// prepodawatelite samo
+					boolean isThisLectureSEt = false;
+					while (it.hasNext() && !isThisLectureSEt) {
+						int tempId = it.next().getId();
+						int checkSum = 0;
+
+						if (scheduleToday[0][tempId - 1] == null) {
+
+							if (getNumberOfLecturesForDay(scheduleToday[0]) < 2) {
+
+								isThisLectureSEt = addLectures(scheduleToday[0], tempId, tempLeftOver,
 										toBeRemovedWhenSet, isThisLectureSEt);
 
 							}
+						} else { // ako ne e null shte prowerim obekta kolko time slota zaema i ako zaema
+									// poweche
+									// ot ili rawen broi razmenqme gi, kato nowoizkaraniq obekt otiwa w dr
+									// kolekciq
+
+							System.out.println("Swap ot further process");
+							isThisLectureSEt = swapLectures(scheduleToday[0], tempId, tempLeftOver, d,
+									toBeRemovedWhenSet, isThisLectureSEt);
 
 							for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
 								// edna grupa na wsichki grupi
 								scheduleToday[p] = scheduleToday[0];
 							}
 						}
-				}
-
-			} else if (!forFurtherProcess.isEmpty()) {
-
-				BusinessObject[][] obj = new BusinessObject[groups][timeSlots.size()];
-					FEObjectForLecureGeneration tempLeftOver = forFurtherProcess.get(0); // predmeta koito ne e slojen
-																							// nikade
-					for (DAYS d : DAYS.values()) {
-						BusinessObject[][] scheduleToday = schedule.get(d);
-
-						Set<UniTimeSlots> timeSlots = tempLeftOver.getAvailableTime().get(d);
-
-						Iterator<UniTimeSlots> it = timeSlots.iterator(); // iterirame warhu swobodnite chasowe na
-																			// prepodawatelite samo
-						boolean isThisLectureSEt = false;
-						while (it.hasNext() && !isThisLectureSEt) {
-							int tempId = it.next().getId();
-							int checkSum = 0;
-
-							if (scheduleToday[0][tempId - 1] == null) {
-
-								if (getNumberOfLecturesForDay(scheduleToday[0]) < 2) {
-
-									isThisLectureSEt = addLectures(scheduleToday[0], tempId, tempLeftOver,
-											toBeRemovedWhenSet, isThisLectureSEt);
-
-								}
-							} else { // ako ne e null shte prowerim obekta kolko time slota zaema i ako zaema
-										// poweche
-										// ot ili rawen broi razmenqme gi, kato nowoizkaraniq obekt otiwa w dr
-										// kolekciq
-
-								System.out.println("Swap ot further process");
-								isThisLectureSEt = swapLectures(scheduleToday[0], tempId, tempLeftOver, d,
-										toBeRemovedWhenSet, isThisLectureSEt);
-
-								for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
-									// edna grupa na wsichki grupi
-									scheduleToday[p] = scheduleToday[0];
-								}
-						}
 					}
 				}
 			}
 
 			for (FEObjectForLecureGeneration o : toBeRemovedWhenSet) {
-				lecturesConstraints.remove(o);
-				forFurtherProcess.remove(o);
+				constraintsLectures.remove(o);
+				forFurtherProcessLectures.remove(o);
 
 			}
 
@@ -218,7 +269,7 @@ public class GeneratorImpl {
 				toBeRemovedWhenSet.add(tempLeftOver);
 				numOfLecturesToday = numOfLecturesToday + 1;
 				BusinessObject reserved = new BusinessObject(tempLeftOver.getSubject(), tempLeftOver.getRoom(),
-						tempLeftOver.getTeacher());
+						tempLeftOver.getTeacher(), true);
 				for (int searchAvalTimeSlots = (tempId - 1); searchAvalTimeSlots < (tempId - 1
 						+ sizeOfTempLeftOver); searchAvalTimeSlots++) {
 					scheduleToday[searchAvalTimeSlots] = reserved;
@@ -264,21 +315,21 @@ public class GeneratorImpl {
 							FEObjectForLecureGeneration fe = new FEObjectForLecureGeneration(forProceess.getRoom(),
 									forProceess.getSub(), forProceess.getTeacher(),
 									allTeachers.get(forProceess.getTeacher()), false);
-							if (!forFurtherProcess.contains(fe)) {
+							if (!forFurtherProcessLectures.contains(fe)) {
 
-								forFurtherProcess.add(fe);
+								forFurtherProcessLectures.add(fe);
 							}
 						}
 						if (v < (tempId - 1 + sizeOfTempLeftOver)) {
 							scheduleToday[v] = new BusinessObject(tempLeftOver.getSubject(), tempLeftOver.getRoom(),
-									tempLeftOver.getTeacher());
+									tempLeftOver.getTeacher(), true);
 
 						} else {
 							scheduleToday[v] = null;
 						}
 					}
 					tempLeftOver.setSet(true);
-					
+
 					toBeRemovedWhenSet.add(tempLeftOver);
 				}
 			}
@@ -304,9 +355,9 @@ public class GeneratorImpl {
 			List<FEObjectForLecureGeneration> toBeRemovedWhenSet = new ArrayList<FEObjectForLecureGeneration>();
 
 			// za wseki constraint, koito imame - namirame podhodqsht time slot
-			LABEL: for (FEObjectForLecureGeneration o : lecturesConstraints) {
+			LABEL: for (FEObjectForLecureGeneration o : constraintsLectures) {
 
-				obj[0] = addEachLectureToSchedule(o, d, obj[0], toBeRemovedWhenSet);
+				obj[0] = addEachLectureToSchedule(o, d, obj[0], toBeRemovedWhenSet, true);
 
 				if (getNumberOfLecturesForDay(obj[0]) > 1)
 					break LABEL;
@@ -317,7 +368,7 @@ public class GeneratorImpl {
 			}
 
 			for (FEObjectForLecureGeneration rem : toBeRemovedWhenSet) {
-				lecturesConstraints.remove(rem);
+				constraintsLectures.remove(rem);
 			}
 
 			schedule.put(d, obj);
@@ -326,7 +377,7 @@ public class GeneratorImpl {
 	}
 
 	private BusinessObject[] addEachLectureToSchedule(FEObjectForLecureGeneration o, DAYS d, BusinessObject[] obj,
-			List<FEObjectForLecureGeneration> toBeRemovedWhenSet) {
+			List<FEObjectForLecureGeneration> toBeRemovedWhenSet, boolean isLecture) {
 
 		// int desiredRoom = o.getRoom().getId(); // zalata koqto prepodawatelq iska za
 		// lekciqta si
@@ -359,7 +410,7 @@ public class GeneratorImpl {
 				if (checkSum == numberSlotsOfLecture) {
 					isThisLectureSEt = true;
 					toBeRemovedWhenSet.add(o);
-					BusinessObject reserved = new BusinessObject(o.getSubject(), o.getRoom(), o.getTeacher());
+					BusinessObject reserved = new BusinessObject(o.getSubject(), o.getRoom(), o.getTeacher(), isLecture);
 					for (int searchAvalTimeSlots = (currTimeSlot - 1); searchAvalTimeSlots < (currTimeSlot - 1
 							+ numberSlotsOfLecture); searchAvalTimeSlots++) {
 						obj[searchAvalTimeSlots] = reserved;
@@ -377,7 +428,19 @@ public class GeneratorImpl {
 		Set<String> lectures = new HashSet<>();
 
 		for (int i = 0; i < scheduleToday.length; i++) {
-			if (scheduleToday[i] != null) {
+			if (scheduleToday[i] != null && scheduleToday[i].isLecture()) { 
+				lectures.add(scheduleToday[i].getSub().getName());
+			}
+		}
+
+		return lectures.size();
+	}
+	
+	private int getNumberOfExercisesForDay(BusinessObject[] scheduleToday) {
+		Set<String> lectures = new HashSet<>();
+
+		for (int i = 0; i < scheduleToday.length; i++) {
+			if (scheduleToday[i] != null && !scheduleToday[i].isLecture()) {
 				lectures.add(scheduleToday[i].getSub().getName());
 			}
 		}
@@ -385,7 +448,7 @@ public class GeneratorImpl {
 		return lectures.size();
 	}
 
-	private Collection<? extends FEObjectForLecureGeneration> generateConstraints() {
+	private List<FEObjectForLecureGeneration> generateConstraints() {
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room = new Rooms(1154, true);
 		Subjects subject = new Subjects(1, 1, "MAtematika", 2, 2);
@@ -505,7 +568,8 @@ public class GeneratorImpl {
 		timeSlotsFRI1.add(new UniTimeSlots(14, "20:45-21:30"));
 
 		availableTime1.put(DAYS.FR, timeSlotsFRI1);
-		FEObjectForLecureGeneration obj1 = new FEObjectForLecureGeneration(room1, subject1, teacher1, availableTime1, false);
+		FEObjectForLecureGeneration obj1 = new FEObjectForLecureGeneration(room1, subject1, teacher1, availableTime1,
+				false);
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room2 = new Rooms(2200, true);
@@ -564,7 +628,8 @@ public class GeneratorImpl {
 
 		availableTime2.put(DAYS.FR, timeSlotsFRI2);
 
-		FEObjectForLecureGeneration obj2 = new FEObjectForLecureGeneration(room2, subject2, teacher2, availableTime2, false);
+		FEObjectForLecureGeneration obj2 = new FEObjectForLecureGeneration(room2, subject2, teacher2, availableTime2,
+				false);
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room3 = new Rooms(2205, true);
@@ -612,7 +677,8 @@ public class GeneratorImpl {
 		timeSlotsFRI3.add(new UniTimeSlots(13, "19:45-20:30"));
 
 		availableTime3.put(DAYS.FR, timeSlotsFRI3);
-		FEObjectForLecureGeneration obj3 = new FEObjectForLecureGeneration(room3, subject3, teacher3, availableTime3, false);
+		FEObjectForLecureGeneration obj3 = new FEObjectForLecureGeneration(room3, subject3, teacher3, availableTime3,
+				false);
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room4 = new Rooms(1151, true);
@@ -662,7 +728,8 @@ public class GeneratorImpl {
 		timeSlotsFRI4.add(new UniTimeSlots(12, "18:45-19:30"));
 
 		availableTime4.put(DAYS.FR, timeSlotsFRI4);
-		FEObjectForLecureGeneration obj4 = new FEObjectForLecureGeneration(room4, subject4, teacher4, availableTime4, false);
+		FEObjectForLecureGeneration obj4 = new FEObjectForLecureGeneration(room4, subject4, teacher4, availableTime4,
+				false);
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room5 = new Rooms(3152, true);
@@ -713,7 +780,8 @@ public class GeneratorImpl {
 		timeSlotsFRI5.add(new UniTimeSlots(13, "19:45-20:30"));
 
 		availableTime5.put(DAYS.FR, timeSlotsFRI5);
-		FEObjectForLecureGeneration obj5 = new FEObjectForLecureGeneration(room5, subject5, teacher5, availableTime5, false);
+		FEObjectForLecureGeneration obj5 = new FEObjectForLecureGeneration(room5, subject5, teacher5, availableTime5,
+				false);
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room6 = new Rooms(4412, true);
@@ -766,7 +834,8 @@ public class GeneratorImpl {
 		timeSlotsFRI6.add(new UniTimeSlots(14, "20:45-21:30"));
 
 		availableTime6.put(DAYS.FR, timeSlotsFRI6);
-		FEObjectForLecureGeneration obj6 = new FEObjectForLecureGeneration(room6, subject6, teacher6, availableTime6, false);
+		FEObjectForLecureGeneration obj6 = new FEObjectForLecureGeneration(room6, subject6, teacher6, availableTime6,
+				false);
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room7 = new Rooms(1151, true);
@@ -820,7 +889,8 @@ public class GeneratorImpl {
 		timeSlotsFRI7.add(new UniTimeSlots(14, "20:45-21:30"));
 
 		availableTime7.put(DAYS.FR, timeSlotsFRI7);
-		FEObjectForLecureGeneration obj7 = new FEObjectForLecureGeneration(room7, subject7, teacher7, availableTime7, false);
+		FEObjectForLecureGeneration obj7 = new FEObjectForLecureGeneration(room7, subject7, teacher7, availableTime7,
+				false);
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room8 = new Rooms(3151, true);
@@ -881,7 +951,8 @@ public class GeneratorImpl {
 		timeSlotsFRI8.add(new UniTimeSlots(14, "20:45-21:30"));
 
 		availableTime8.put(DAYS.FR, timeSlotsFRI8);
-		FEObjectForLecureGeneration obj8 = new FEObjectForLecureGeneration(room8, subject8, teacher8, availableTime8, false);
+		FEObjectForLecureGeneration obj8 = new FEObjectForLecureGeneration(room8, subject8, teacher8, availableTime8,
+				false);
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room9 = new Rooms(4151, true);
@@ -942,7 +1013,8 @@ public class GeneratorImpl {
 		timeSlotsFRI9.add(new UniTimeSlots(14, "20:45-21:30"));
 
 		availableTime9.put(DAYS.FR, timeSlotsFRI9);
-		FEObjectForLecureGeneration obj9 = new FEObjectForLecureGeneration(room9, subject9, teacher9, availableTime9, false);
+		FEObjectForLecureGeneration obj9 = new FEObjectForLecureGeneration(room9, subject9, teacher9, availableTime9,
+				false);
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room10 = new Rooms(1151, true);
@@ -1003,7 +1075,8 @@ public class GeneratorImpl {
 		timeSlotsFRI10.add(new UniTimeSlots(14, "20:45-21:30"));
 
 		availableTime10.put(DAYS.FR, timeSlotsFRI10);
-		FEObjectForLecureGeneration obj10 = new FEObjectForLecureGeneration(room10, subject10, teacher10, availableTime10, false);
+		FEObjectForLecureGeneration obj10 = new FEObjectForLecureGeneration(room10, subject10, teacher10,
+				availableTime10, false);
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room11 = new Rooms(1152, true);
@@ -1064,7 +1137,8 @@ public class GeneratorImpl {
 		timeSlotsFRI11.add(new UniTimeSlots(14, "20:45-21:30"));
 
 		availableTime11.put(DAYS.FR, timeSlotsFRI11);
-		FEObjectForLecureGeneration obj11 = new FEObjectForLecureGeneration(room11, subject11, teacher11, availableTime11, false);
+		FEObjectForLecureGeneration obj11 = new FEObjectForLecureGeneration(room11, subject11, teacher11,
+				availableTime11, false);
 
 		List<FEObjectForLecureGeneration> lecturesConstraints = new ArrayList<>();
 		lecturesConstraints.add(obj);
