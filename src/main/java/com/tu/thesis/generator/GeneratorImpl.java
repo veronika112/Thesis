@@ -69,7 +69,7 @@ public class GeneratorImpl {
 
 		System.out.println("nakraq FURTHER PROCCESS- " + forFurtherProcessLectures.toString());
 		System.out.println("nakraq LECTURES- " + constraintsLectures.toString());
-		
+
 		System.out.println("nakraq UPRAJN FURTHER PROCCESS- " + forFurtherProcessExercises.toString());
 		System.out.println("nakraq UPRAJN LECTURES- " + constraintsExercises.toString());
 	}
@@ -110,6 +110,7 @@ public class GeneratorImpl {
 	private void computeExercisesSchedule(int groups) {
 
 		for (int i = 0; i < groups; i++) {
+			System.out.println("GROUPS:" + i);
 			// fill in time table for lectures
 			for (DAYS d : DAYS.values()) {
 				System.out.println("PULNIM 1WI PUT I SI BESHE OK - 5 EXECUTIONS");
@@ -120,7 +121,9 @@ public class GeneratorImpl {
 				// za wseki constraint, koito imame - namirame podhodqsht time slot
 				LABEL: for (FEObjectForLecureGeneration o : constraintsExercises.get(i)) {
 					System.out.println("PREDMETI: " + o.getSubject().getName());
-					currentProgram[i] = addEachLectureToSchedule(o, d, currentProgram[i], toBeRemovedWhenSet, false);
+
+					currentProgram[i] = addEachLectureToSchedule(o, d, currentProgram[i], toBeRemovedWhenSet, false,
+							currentProgram, i);
 
 					if (getNumberOfExercisesForDay(currentProgram[i]) > 1)
 						break LABEL;
@@ -385,7 +388,7 @@ public class GeneratorImpl {
 			// za wseki constraint, koito imame - namirame podhodqsht time slot
 			LABEL: for (FEObjectForLecureGeneration o : constraintsLectures) {
 
-				obj[0] = addEachLectureToSchedule(o, d, obj[0], toBeRemovedWhenSet, true);
+				obj[0] = addEachLectureToSchedule(o, d, obj[0], toBeRemovedWhenSet, true, null, 0);
 
 				if (getNumberOfLecturesForDay(obj[0]) > 1)
 					break LABEL;
@@ -417,7 +420,8 @@ public class GeneratorImpl {
 	}
 
 	private BusinessObject[] addEachLectureToSchedule(FEObjectForLecureGeneration o, DAYS d, BusinessObject[] obj,
-			List<FEObjectForLecureGeneration> toBeRemovedWhenSet, boolean isLecture) {
+			List<FEObjectForLecureGeneration> toBeRemovedWhenSet, boolean isLecture, BusinessObject[][] currentProgram,
+			int i) {
 
 		// int desiredRoom = o.getRoom().getId(); // zalata koqto prepodawatelq iska za
 		// lekciqta si
@@ -445,18 +449,28 @@ public class GeneratorImpl {
 				// swobodni slotowe
 
 				if ((currTimeSlot + numberSlots - 1) <= (timeSlots.size() - 1)) {
-					for (int searchAvalTimeSlots = currTimeSlot; searchAvalTimeSlots < (currTimeSlot
+					for (int searchAvalTimeSlots = currTimeSlot - 1; searchAvalTimeSlots < (currTimeSlot -1
 							+ numberSlots); searchAvalTimeSlots++) {
-						if(isLecture) {
-							if (obj[searchAvalTimeSlots] == null && o.getAvailableTime().get(d).contains(tempTimeslot)) {
+						if (isLecture) {
+							if (obj[searchAvalTimeSlots] == null
+									&& o.getAvailableTime().get(d).contains(tempTimeslot)) {
 								checkSum += 1;
 							}
 						} else {
 							if (obj[searchAvalTimeSlots] == null) {
-								checkSum += 1;
+								boolean conflict = false;
+								for (int temp = 0; temp < i; temp++) {
+									if((currentProgram[temp][searchAvalTimeSlots]!= null) && currentProgram[temp][searchAvalTimeSlots].getSub().getName()
+											.equals(o.getSubject().getName())) {
+										conflict = true;
+									}
+								}
+								if (conflict == false) {
+									checkSum += 1;
+								}
 							}
 						}
-						
+
 					}
 
 				}
