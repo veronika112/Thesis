@@ -118,7 +118,7 @@ public class FEObjectForLecureGeneration {
 	@Override
 	public String toString() {
 		return "FEObjectForLecureGeneration [room=" + room + ", subject=" + subject + ", teacher=" + teacher
-				+ ", availableTime=" + availableTime + ", isSet=" + isSet + "]";
+				+ ", availableTime=" + availableTime + ", isSet=" + isSet + "]\n";
 	}
 
 	

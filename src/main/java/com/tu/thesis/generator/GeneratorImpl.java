@@ -69,6 +69,9 @@ public class GeneratorImpl {
 
 		System.out.println("nakraq FURTHER PROCCESS- " + forFurtherProcessLectures.toString());
 		System.out.println("nakraq LECTURES- " + constraintsLectures.toString());
+		
+		System.out.println("nakraq UPRAJN FURTHER PROCCESS- " + forFurtherProcessExercises.toString());
+		System.out.println("nakraq UPRAJN LECTURES- " + constraintsExercises.toString());
 	}
 
 	/**
@@ -95,7 +98,7 @@ public class GeneratorImpl {
 		// razpredelqne na uprajneniq
 		computeExercisesSchedule(groups);
 
-			CSVHelper.exportDataToExcel("C:\\Users\\User\\Desktop\\program.xlsx", schedule);
+		CSVHelper.exportDataToExcel("C:\\Users\\User\\Desktop\\program.xlsx", schedule);
 	}
 
 	/**
@@ -191,17 +194,19 @@ public class GeneratorImpl {
 
 						for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
 							// edna grupa na wsichki grupi
-						//	scheduleToday[p] = scheduleToday[0];
-							
+							// scheduleToday[p] = scheduleToday[0];
+
 							for (int x = 0; x < scheduleToday[0].length; x++) {
-                                if (scheduleToday[0][x] != null) {
-                                    BusinessObject temp = new BusinessObject(scheduleToday[0][x].getSub(), scheduleToday[0][x].getRoom(), scheduleToday[0][x].getTeacher(), scheduleToday[0][x].isLecture());
-                                    scheduleToday[p][x] = temp;
-                                    temp = null;
-                                } else {
-                                    scheduleToday[p][x] = null;
-                                }
-                            }
+								if (scheduleToday[0][x] != null) {
+									BusinessObject temp = new BusinessObject(scheduleToday[0][x].getSub(),
+											scheduleToday[0][x].getRoom(), scheduleToday[0][x].getTeacher(),
+											scheduleToday[0][x].isLecture());
+									scheduleToday[p][x] = temp;
+									temp = null;
+								} else {
+									scheduleToday[p][x] = null;
+								}
+							}
 						}
 					}
 				}
@@ -243,16 +248,18 @@ public class GeneratorImpl {
 
 							for (int p = 1; p < groups; p++) { // towa replikira razpredelenieto za
 								// edna grupa na wsichki grupi
-								
+
 								for (int x = 0; x < scheduleToday[0].length; x++) {
-	                                if (scheduleToday[0][x] != null) {
-	                                    BusinessObject temp = new BusinessObject(scheduleToday[0][x].getSub(), scheduleToday[0][x].getRoom(), scheduleToday[0][x].getTeacher(), scheduleToday[0][x].isLecture());
-	                                    scheduleToday[p][x] = temp;
-	                                    temp = null;
-	                                } else {
-	                                    scheduleToday[p][x] = null;
-	                                }
-	                            }
+									if (scheduleToday[0][x] != null) {
+										BusinessObject temp = new BusinessObject(scheduleToday[0][x].getSub(),
+												scheduleToday[0][x].getRoom(), scheduleToday[0][x].getTeacher(),
+												scheduleToday[0][x].isLecture());
+										scheduleToday[p][x] = temp;
+										temp = null;
+									} else {
+										scheduleToday[p][x] = null;
+									}
+								}
 							}
 						}
 					}
@@ -332,7 +339,6 @@ public class GeneratorImpl {
 					isThisLectureSEt = true;
 
 					for (int v = tempId - 1; v < (tempId - 1 + forSwap.getSub().getLecture_num()); v++) {
-						System.out.println("ZZZZ" + v);
 						BusinessObject forProceess = scheduleToday[v];
 						if (forProceess != null) {
 							FEObjectForLecureGeneration fe = new FEObjectForLecureGeneration(forProceess.getRoom(),
@@ -370,7 +376,6 @@ public class GeneratorImpl {
 
 		// fill in time table for lectures
 		for (DAYS d : DAYS.values()) {
-			System.out.println("PULNIM 1WI PUT I SI BESHE OK - 5 EXECUTIONS");
 			int numOfLecturesToday = 0;
 			BusinessObject[][] obj = new BusinessObject[groups][timeSlots.size()]; // obhojdame wseki den i wsqka grupa
 																					// - namirame se na Nti red
@@ -387,17 +392,18 @@ public class GeneratorImpl {
 			}
 
 			for (int i = 1; i < groups; i++) { // towa replikira razpredelenieto za edna grupa na wsichki grupi
-					// edna grupa na wsichki grupi
-				//	scheduleToday[p] = scheduleToday[0];
-					
-					for (int x = 0; x < obj[0].length; x++) {
-                        if (obj[0][x] != null) {
-                            BusinessObject temp = new BusinessObject(obj[0][x].getSub(), obj[0][x].getRoom(), obj[0][x].getTeacher(), obj[0][x].isLecture());
-                            obj[i][x] = temp;
-                            temp = null;
-                        } else {
-                            obj[i][x] = null;
-                        }
+				// edna grupa na wsichki grupi
+				// scheduleToday[p] = scheduleToday[0];
+
+				for (int x = 0; x < obj[0].length; x++) {
+					if (obj[0][x] != null) {
+						BusinessObject temp = new BusinessObject(obj[0][x].getSub(), obj[0][x].getRoom(),
+								obj[0][x].getTeacher(), obj[0][x].isLecture());
+						obj[i][x] = temp;
+						temp = null;
+					} else {
+						obj[i][x] = null;
+					}
 				}
 			}
 
@@ -416,15 +422,17 @@ public class GeneratorImpl {
 		// int desiredRoom = o.getRoom().getId(); // zalata koqto prepodawatelq iska za
 		// lekciqta si
 		int numberSlots = 0;
-
+		Iterator<UniTimeSlots> iter = null;// obhojdame chasowete, k saswobodni na
+		// prepodawatelq
 		if (isLecture == true) {
 			numberSlots = o.getSubject().getLecture_num(); // za wsqka lekciq kolko sa chasowite slotowe
+			iter = o.getAvailableTime().get(d).iterator(); // obhojdame chasowete, k saswobodni na
+			// prepodawatelq
 		} else {
 			numberSlots = o.getSubject().getExercises_num(); // za wsqko uprajnenie kolko sa chasowite slotowe
+			iter = timeSlots.iterator(); // obhojdame chasowete, k saswobodni na prepodawatelq
 		}
 
-		Iterator<UniTimeSlots> iter = o.getAvailableTime().get(d).iterator(); // obhojdame chasowete, k saswobodni na
-																				// prepodawatelq
 		boolean isThisLectureSEt = false;
 
 		while (iter.hasNext() && !isThisLectureSEt) {
@@ -439,9 +447,16 @@ public class GeneratorImpl {
 				if ((currTimeSlot + numberSlots - 1) <= (timeSlots.size() - 1)) {
 					for (int searchAvalTimeSlots = currTimeSlot; searchAvalTimeSlots < (currTimeSlot
 							+ numberSlots); searchAvalTimeSlots++) {
-						if (obj[searchAvalTimeSlots] == null && o.getAvailableTime().get(d).contains(tempTimeslot)) {
-							checkSum += 1;
+						if(isLecture) {
+							if (obj[searchAvalTimeSlots] == null && o.getAvailableTime().get(d).contains(tempTimeslot)) {
+								checkSum += 1;
+							}
+						} else {
+							if (obj[searchAvalTimeSlots] == null) {
+								checkSum += 1;
+							}
 						}
+						
 					}
 
 				}
