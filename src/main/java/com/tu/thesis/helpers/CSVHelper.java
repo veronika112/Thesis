@@ -34,7 +34,7 @@ public class CSVHelper {
 		Map<DAYS, BusinessObject[][]> theMap = new TreeMap<>(schedule);
 		
 		List<UniTimeSlots> timeSlots = OtherImpl.retrieveAllTimeSlots();
-		timeSlots.add(0, new UniTimeSlots());
+		timeSlots.add(0, new UniTimeSlots(20, "    "));
 
 		Workbook workbook = new XSSFWorkbook();
 
@@ -55,13 +55,24 @@ public class CSVHelper {
 		int counter = 0;
 
 		for(DAYS d: theMap.keySet()) {
-		
-			Row rowD = sheet.createRow((short) counter);
-			Cell cellDay = rowD.createCell(1);
-			cellDay.setCellValue(d.toString());
-			sheet.addMergedRegion(new CellRangeAddress(counter,counter,0,14));
 					
+			Row rowD = sheet.createRow((short) counter);
 			
+			//sheet.addMergedRegion(new CellRangeAddress(counter,counter,0,14));
+			
+			Cell cellDay = rowD.createCell((short) 1);
+			Font fontDays = workbook.createFont();
+			fontDays.setBold(true);
+			fontDays.setFontHeightInPoints((short) 12);
+			fontDays.setColor(IndexedColors.SEA_GREEN.getIndex());
+			
+			CellStyle daysCellStyle = workbook.createCellStyle();
+			daysCellStyle.setFont(fontDays);
+			cellDay.setCellValue(d.toString());
+			cellDay.setCellStyle(daysCellStyle);
+			
+			
+					
 			counter++;
 			
 		// Create a Row
