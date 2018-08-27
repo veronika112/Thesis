@@ -53,6 +53,15 @@ public class CSVHelper {
 		int counter = 0;
 
 		for (DAYS d : theMap.keySet()) {
+			String days = "";
+			switch(d) {
+			case MON: days  = "Понеделник"; break;
+			case TUE: days  = "Вторник"; break;
+			case WED: days  = "Сряда"; break;
+			case THU: days  = "Четвъртък"; break;
+			case FR: days  = "Петък"; break;
+			}
+			
 
 			Row rowD = sheet.createRow((short) counter);
 
@@ -66,7 +75,7 @@ public class CSVHelper {
 			daysCellStyle.setFont(fontDays);
 			
 			daysCellStyle.setAlignment(HorizontalAlignment.CENTER);
-			cellDay.setCellValue(d.toString());
+			cellDay.setCellValue(days);
 			cellDay.setCellStyle(daysCellStyle);
 
 			

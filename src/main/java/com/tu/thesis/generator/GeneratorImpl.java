@@ -1,6 +1,7 @@
 package com.tu.thesis.generator;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.tu.thesis.business.OtherImpl;
+import com.tu.thesis.business.RoomsImpl;
 import com.tu.thesis.entity.Rooms;
 import com.tu.thesis.entity.Subjects;
 import com.tu.thesis.entity.Teachers;
@@ -45,16 +47,11 @@ public class GeneratorImpl {
 	// zalite za uprajneniq
 	Map<DAYS, Map<UniTimeSlots, List<Rooms>>> roomsForEx = new HashMap<>();
 
-	public void putRooms() throws CloneNotSupportedException {
+	public void putRooms() throws CloneNotSupportedException, ClassNotFoundException, SQLException {
 		
 		Map<UniTimeSlots, List<Rooms>> slots = new HashMap<>();
 		
-		List<Rooms> allExercisesRooms = new ArrayList<>();
-		allExercisesRooms.add(new Rooms(2150, false));
-		allExercisesRooms.add(new Rooms(3250, false));
-		allExercisesRooms.add(new Rooms(4450, false));
-		allExercisesRooms.add(new Rooms(6550, false));
-		allExercisesRooms.add(new Rooms(7150, false));
+		List<Rooms> allExercisesRooms = RoomsImpl.retrieveAllRooms();
 		
 		for(UniTimeSlots uts: timeSlots) {
 			
@@ -75,8 +72,6 @@ public class GeneratorImpl {
 		        copy.put(entry.getKey(),
 		           new ArrayList<Rooms>(entry.getValue()));
 		    }
-			
-			
 			roomsForEx.put(d, copy);
 		}
 	}
@@ -120,8 +115,10 @@ public class GeneratorImpl {
 	 * @param groups
 	 * @throws IOException
 	 * @throws CloneNotSupportedException 
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public void computeSchedule(int groups) throws IOException, CloneNotSupportedException {
+	public void computeSchedule(int groups) throws IOException, CloneNotSupportedException, ClassNotFoundException, SQLException {
 
 		constraintsLectures.addAll(generateConstraints()); // dobawqne na danni
 		// pulnim uprajneniqta za wsqka grupa
@@ -581,7 +578,7 @@ public class GeneratorImpl {
 	private List<FEObjectForLecureGeneration> generateConstraints() {
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room = new Rooms(1154, true);
-		Subjects subject = new Subjects(1, 1, "MAtematika", 2, 2);
+		Subjects subject = new Subjects(1, 1, "Висша математика – I", 2, 2);
 		Teachers teacher = new Teachers(5, "Dragan Draganov");
 
 		Map<DAYS, Set<UniTimeSlots>> availableTime = new HashMap<>();
@@ -641,7 +638,7 @@ public class GeneratorImpl {
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room1 = new Rooms(1151, true);
-		Subjects subject1 = new Subjects(2, 1, "PIK", 3, 2);
+		Subjects subject1 = new Subjects(2, 1, "ПИК – II", 3, 2);
 		Teachers teacher1 = new Teachers(2, "Petar Petrov");
 
 		Map<DAYS, Set<UniTimeSlots>> availableTime1 = new HashMap<>();
@@ -703,7 +700,7 @@ public class GeneratorImpl {
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room2 = new Rooms(2200, true);
-		Subjects subject2 = new Subjects(3, 1, "OIP", 4, 1);
+		Subjects subject2 = new Subjects(3, 1, "Технологичен практикум", 4, 1);
 		Teachers teacher2 = new Teachers(8, "Todor Todorov");
 
 		Map<DAYS, Set<UniTimeSlots>> availableTime2 = new HashMap<>();
@@ -763,7 +760,7 @@ public class GeneratorImpl {
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room3 = new Rooms(2205, true);
-		Subjects subject3 = new Subjects(7, 1, "Ximiq", 1, 3);
+		Subjects subject3 = new Subjects(7, 1, "Полупроводникови елементи", 1, 3);
 		Teachers teacher3 = new Teachers(5, "AAAA. AAAA.");
 
 		Map<DAYS, Set<UniTimeSlots>> availableTime3 = new HashMap<>();
@@ -812,7 +809,7 @@ public class GeneratorImpl {
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room4 = new Rooms(1151, true);
-		Subjects subject4 = new Subjects(8, 1, "Mashinoznane", 1, 1);
+		Subjects subject4 = new Subjects(8, 1, "Техническа  механика", 1, 1);
 		Teachers teacher4 = new Teachers(2, "BBBBB. BBBBBBBb.");
 
 		Map<DAYS, Set<UniTimeSlots>> availableTime4 = new HashMap<>();
@@ -863,7 +860,7 @@ public class GeneratorImpl {
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room5 = new Rooms(3152, true);
-		Subjects subject5 = new Subjects(2, 1, "Materialoznanie", 4, 4);
+		Subjects subject5 = new Subjects(2, 1, "Основи на инженерното проектиране II", 4, 4);
 		Teachers teacher5 = new Teachers(2, "PPPPPPP PPPPP");
 
 		Map<DAYS, Set<UniTimeSlots>> availableTime5 = new HashMap<>();
@@ -915,7 +912,7 @@ public class GeneratorImpl {
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room6 = new Rooms(4412, true);
-		Subjects subject6 = new Subjects(2, 1, "BD", 3, 2);
+		Subjects subject6 = new Subjects(2, 1, "Физика – II", 3, 2);
 		Teachers teacher6 = new Teachers(2, "GGGGG GGGGGG");
 
 		Map<DAYS, Set<UniTimeSlots>> availableTime6 = new HashMap<>();
@@ -969,7 +966,7 @@ public class GeneratorImpl {
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room7 = new Rooms(1151, true);
-		Subjects subject7 = new Subjects(2, 1, "PTS", 2, 1);
+		Subjects subject7 = new Subjects(2, 1, "Теоретична електротехника и електрически измервания", 2, 1);
 		Teachers teacher7 = new Teachers(2, "DDDDAAA DDEEERRD");
 
 		Map<DAYS, Set<UniTimeSlots>> availableTime7 = new HashMap<>();
@@ -1086,7 +1083,7 @@ public class GeneratorImpl {
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room9 = new Rooms(4151, true);
-		Subjects subject9 = new Subjects(11, 1, "Ispanski", 2, 3);
+		Subjects subject9 = new Subjects(11, 1, "Физика – I", 2, 3);
 		Teachers teacher9 = new Teachers(2, "Iwanka Iwanowa");
 
 		Map<DAYS, Set<UniTimeSlots>> availableTime9 = new HashMap<>();
@@ -1148,7 +1145,7 @@ public class GeneratorImpl {
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room10 = new Rooms(1151, true);
-		Subjects subject10 = new Subjects(6, 1, "Biologiq", 3, 2);
+		Subjects subject10 = new Subjects(6, 1, "Въведение в специалността", 3, 2);
 		Teachers teacher10 = new Teachers(2, "Tswetelinka Petrowa");
 
 		Map<DAYS, Set<UniTimeSlots>> availableTime10 = new HashMap<>();
@@ -1210,7 +1207,7 @@ public class GeneratorImpl {
 
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room11 = new Rooms(1152, true);
-		Subjects subject11 = new Subjects(6, 1, "Fizichesko", 2, 2);
+		Subjects subject11 = new Subjects(6, 1, "ПИК – II", 2, 2);
 		Teachers teacher11 = new Teachers(11, "Petar Petrow");
 
 		Map<DAYS, Set<UniTimeSlots>> availableTime11 = new HashMap<>();
@@ -1280,9 +1277,9 @@ public class GeneratorImpl {
 		lecturesConstraints.add(obj6);
 		lecturesConstraints.add(obj7);
 		lecturesConstraints.add(obj8);
-		lecturesConstraints.add(obj9);
-		lecturesConstraints.add(obj10);
-		lecturesConstraints.add(obj11);
+		//lecturesConstraints.add(obj9);
+		//lecturesConstraints.add(obj10);
+		//lecturesConstraints.add(obj11);
 
 		return lecturesConstraints;
 	}
