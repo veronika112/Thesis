@@ -42,6 +42,9 @@ public class GeneratorImpl {
 	Map<Teachers, Map<DAYS, Set<UniTimeSlots>>> allTeachers = new HashMap<>(); // spisak ot wsichki lektori s tehnite
 																				// chasowi pretencii
 
+	// zalite za uprajneniq
+	Map<DAYS, Map<UniTimeSlots, List<Rooms>>> roomsForEx = new HashMap<>();
+
 	/**
 	 * popalwame spisaka na prepodawatelite
 	 */
@@ -449,7 +452,7 @@ public class GeneratorImpl {
 				// swobodni slotowe
 
 				if ((currTimeSlot + numberSlots - 1) <= (timeSlots.size() - 1)) {
-					for (int searchAvalTimeSlots = currTimeSlot - 1; searchAvalTimeSlots < (currTimeSlot -1
+					for (int searchAvalTimeSlots = currTimeSlot - 1; searchAvalTimeSlots < (currTimeSlot - 1
 							+ numberSlots); searchAvalTimeSlots++) {
 						if (isLecture) {
 							if (obj[searchAvalTimeSlots] == null
@@ -460,8 +463,9 @@ public class GeneratorImpl {
 							if (obj[searchAvalTimeSlots] == null) {
 								boolean conflict = false;
 								for (int temp = 0; temp < i; temp++) {
-									if((currentProgram[temp][searchAvalTimeSlots]!= null) && currentProgram[temp][searchAvalTimeSlots].getSub().getName()
-											.equals(o.getSubject().getName())) {
+									if ((currentProgram[temp][searchAvalTimeSlots] != null)
+											&& currentProgram[temp][searchAvalTimeSlots].getSub().getName()
+													.equals(o.getSubject().getName())) {
 										conflict = true;
 									}
 								}
