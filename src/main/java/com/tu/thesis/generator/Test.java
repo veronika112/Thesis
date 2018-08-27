@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class Test {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, CloneNotSupportedException {
 		// TODO Auto-generated method stub
 		GeneratorImpl gi = new GeneratorImpl();
 		gi.computeSchedule(3);	

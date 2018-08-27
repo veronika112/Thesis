@@ -32,7 +32,10 @@ public class UniTimeSlots {
 		return true;
 	}
 
-	public UniTimeSlots() {
+	public UniTimeSlots(int currTimeSlot) {
+		super();
+		this.id = currTimeSlot;
+		this.name="";
 	}
 
 	public UniTimeSlots(int id, String name) {

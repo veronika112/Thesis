@@ -18,6 +18,12 @@ public class Rooms {
 		return "Rooms [getId()=" + getId() + ", isLecture()=" + isLecture() + ", hashCode()=" + hashCode() + "]";
 	}
 
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		Rooms r = new Rooms(this.id, this.isLecture);
+		return r;
+	}
+
 	public Rooms(int id, boolean isLecture) {
 		super();
 		this.id = id;
