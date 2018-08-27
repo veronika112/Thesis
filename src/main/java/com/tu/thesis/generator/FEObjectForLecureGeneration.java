@@ -16,8 +16,6 @@ public class FEObjectForLecureGeneration {
 	private Map<DAYS, Set<UniTimeSlots>> availableTime;
 	boolean isSet;
 
-	
-
 	public FEObjectForLecureGeneration(Rooms room, Subjects subject, Teachers teacher,
 			Map<DAYS, Set<UniTimeSlots>> availableTime, boolean isSet) {
 
@@ -36,7 +34,7 @@ public class FEObjectForLecureGeneration {
 	public void setSet(boolean isSet) {
 		this.isSet = isSet;
 	}
-	
+
 	public Rooms getRoom() {
 		return room;
 	}
@@ -120,7 +118,5 @@ public class FEObjectForLecureGeneration {
 		return "FEObjectForLecureGeneration [room=" + room + ", subject=" + subject + ", teacher=" + teacher
 				+ ", availableTime=" + availableTime + ", isSet=" + isSet + "]\n";
 	}
-
-	
 
 }

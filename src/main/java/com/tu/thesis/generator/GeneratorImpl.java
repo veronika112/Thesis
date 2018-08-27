@@ -48,35 +48,32 @@ public class GeneratorImpl {
 	Map<DAYS, Map<UniTimeSlots, List<Rooms>>> roomsForEx = new HashMap<>();
 
 	public void putRooms() throws CloneNotSupportedException, ClassNotFoundException, SQLException {
-		
+
 		Map<UniTimeSlots, List<Rooms>> slots = new HashMap<>();
-		
+
 		List<Rooms> allExercisesRooms = RoomsImpl.retrieveAllRooms();
-		
-		for(UniTimeSlots uts: timeSlots) {
-			
-			List<Rooms> rooms = new ArrayList<>(); 
-			for(Rooms r : allExercisesRooms) {
+
+		for (UniTimeSlots uts : timeSlots) {
+
+			List<Rooms> rooms = new ArrayList<>();
+			for (Rooms r : allExercisesRooms) {
 				rooms.add((Rooms) r.clone());
 			}
-			
+
 			slots.put(uts, rooms);
 		}
-		
-		for(DAYS d : DAYS.values()) {
-			
-			HashMap<UniTimeSlots, List<Rooms>> copy =  new HashMap<>();
-			
-		    for (Map.Entry<UniTimeSlots, List<Rooms>> entry : slots.entrySet())
-		    {
-		        copy.put(entry.getKey(),
-		           new ArrayList<Rooms>(entry.getValue()));
-		    }
+
+		for (DAYS d : DAYS.values()) {
+
+			HashMap<UniTimeSlots, List<Rooms>> copy = new HashMap<>();
+
+			for (Map.Entry<UniTimeSlots, List<Rooms>> entry : slots.entrySet()) {
+				copy.put(entry.getKey(), new ArrayList<Rooms>(entry.getValue()));
+			}
 			roomsForEx.put(d, copy);
 		}
 	}
-	
-	
+
 	/**
 	 * popalwame spisaka na prepodawatelite
 	 */
@@ -114,11 +111,12 @@ public class GeneratorImpl {
 	 * 
 	 * @param groups
 	 * @throws IOException
-	 * @throws CloneNotSupportedException 
-	 * @throws SQLException 
-	 * @throws ClassNotFoundException 
+	 * @throws CloneNotSupportedException
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
 	 */
-	public void computeSchedule(int groups) throws IOException, CloneNotSupportedException, ClassNotFoundException, SQLException {
+	public void computeSchedule(int groups)
+			throws IOException, CloneNotSupportedException, ClassNotFoundException, SQLException {
 
 		constraintsLectures.addAll(generateConstraints()); // dobawqne na danni
 		// pulnim uprajneniqta za wsqka grupa
@@ -127,7 +125,7 @@ public class GeneratorImpl {
 		}
 		evaluateAllTeachersTimesConstraints();
 		putRooms();
-		
+
 		// razpredelqne na lekcii
 		computeLecturesSchedule(groups);
 		if (!constraintsLectures.isEmpty()) {
@@ -516,26 +514,24 @@ public class GeneratorImpl {
 				if (checkSum == numberSlots) {
 					isThisLectureSEt = true;
 					toBeRemovedWhenSet.add(o);
-					
+
 					Rooms toBeSet = new Rooms();
-					
-					if(isLecture == false) {
-						
+
+					if (isLecture == false) {
+
 						UniTimeSlots ts = new UniTimeSlots(currTimeSlot);
 						Map<UniTimeSlots, List<Rooms>> slots = roomsForEx.get(d);
-						List<Rooms> rooms = slots.get(ts); 
+						List<Rooms> rooms = slots.get(ts);
 						toBeSet = rooms.get(0);
-						
+
 						roomsForEx.get(d).get(ts).remove(toBeSet);
-						
+
 					} else {
 						toBeSet = o.getRoom();
 					}
-						
-					BusinessObject reserved = new BusinessObject(o.getSubject(), toBeSet, o.getTeacher(),
-							isLecture);
-					
-					
+
+					BusinessObject reserved = new BusinessObject(o.getSubject(), toBeSet, o.getTeacher(), isLecture);
+
 					for (int searchAvalTimeSlots = (currTimeSlot - 1); searchAvalTimeSlots < (currTimeSlot - 1
 							+ numberSlots); searchAvalTimeSlots++) {
 						obj[searchAvalTimeSlots] = reserved;
@@ -572,8 +568,6 @@ public class GeneratorImpl {
 
 		return lectures.size();
 	}
-	
-	
 
 	private List<FEObjectForLecureGeneration> generateConstraints() {
 		// constraint for 1 teacher for 1 subject and for 1 room
@@ -1277,9 +1271,9 @@ public class GeneratorImpl {
 		lecturesConstraints.add(obj6);
 		lecturesConstraints.add(obj7);
 		lecturesConstraints.add(obj8);
-		//lecturesConstraints.add(obj9);
-		//lecturesConstraints.add(obj10);
-		//lecturesConstraints.add(obj11);
+		// lecturesConstraints.add(obj9);
+		// lecturesConstraints.add(obj10);
+		// lecturesConstraints.add(obj11);
 
 		return lecturesConstraints;
 	}

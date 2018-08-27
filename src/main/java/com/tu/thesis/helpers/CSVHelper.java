@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -17,7 +16,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.tu.thesis.business.OtherImpl;
@@ -36,8 +34,6 @@ public class CSVHelper {
 
 		Workbook workbook = new XSSFWorkbook();
 
-		CreationHelper createHelper = workbook.getCreationHelper();
-
 		Sheet sheet = workbook.createSheet("Program");
 
 		// Create a Font for styling header cells
@@ -54,14 +50,23 @@ public class CSVHelper {
 
 		for (DAYS d : theMap.keySet()) {
 			String days = "";
-			switch(d) {
-			case MON: days  = "Понеделник"; break;
-			case TUE: days  = "Вторник"; break;
-			case WED: days  = "Сряда"; break;
-			case THU: days  = "Четвъртък"; break;
-			case FR: days  = "Петък"; break;
+			switch (d) {
+			case MON:
+				days = "Понеделник";
+				break;
+			case TUE:
+				days = "Вторник";
+				break;
+			case WED:
+				days = "Сряда";
+				break;
+			case THU:
+				days = "Четвъртък";
+				break;
+			case FR:
+				days = "Петък";
+				break;
 			}
-			
 
 			Row rowD = sheet.createRow((short) counter);
 
@@ -73,14 +78,12 @@ public class CSVHelper {
 
 			CellStyle daysCellStyle = workbook.createCellStyle();
 			daysCellStyle.setFont(fontDays);
-			
+
 			daysCellStyle.setAlignment(HorizontalAlignment.CENTER);
 			cellDay.setCellValue(days);
 			cellDay.setCellStyle(daysCellStyle);
 
-			
-
-			sheet.addMergedRegion(new CellRangeAddress(counter, counter+1, 0, 14));
+			sheet.addMergedRegion(new CellRangeAddress(counter, counter + 1, 0, 14));
 			// cellDay.setCellValue(new XSSFRichTextString("This is a test of merging"));
 
 			counter += 2;
@@ -96,11 +99,11 @@ public class CSVHelper {
 			}
 
 			sheet.setColumnWidth(0, 1000);
-			
+
 			// Resize all columns to fit the content size
 			for (int i = 1; i < timeSlots.size(); i++) {
-				//sheet.autoSizeColumn(i);
-				
+				// sheet.autoSizeColumn(i);
+
 				sheet.setColumnWidth(i, 3600);
 			}
 
@@ -111,7 +114,7 @@ public class CSVHelper {
 			for (int i = 0; i < theMap.get(d).length; i++) {
 
 				row = sheet.createRow(rowNum);
-				
+
 				for (int j = 0; j < theMap.get(d)[i].length; j++) {
 
 					String value = "";
