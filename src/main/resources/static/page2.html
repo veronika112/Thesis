@@ -99,51 +99,6 @@
 				<th>Брой упражнения</th>
 				<th>Избор на преподавател</th>
 			</tr>
-			<tr>
-				<td>Alfreds Futterkiste</td>
-				<td>Maria Anders</td>
-				<td>Maria Anders</td>
-				<td>Maria Anders</td>
-				<td><center>
-						<div class="dropdown">
-							<button class="dropbtn">Избор...</button>
-							<div class="dropdown-content">
-								<a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a
-									href="#">4</a> <a href="#">5</a> <a href="#">6</a>
-							</div>
-						</div>
-					</center></td>
-			</tr>
-			<tr>
-				<td>Berglunds snabbköp</td>
-				<td>Christina Berglund</td>
-				<td>Maria Anders</td>
-				<td>Maria Anders</td>
-				<td><center>
-						<div class="dropdown">
-							<button class="dropbtn">Избор...</button>
-							<div class="dropdown-content">
-								<a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a
-									href="#">4</a> <a href="#">5</a> <a href="#">6</a>
-							</div>
-						</div>
-					</center></td>
-			</tr>
-			<tr>
-				<td>Centro comercial Moctezuma</td>
-				<td>Francisco Chang</td>
-				<td>Maria Anders</td>
-				<td>Maria Anders</td>
-				<td><center>
-						<div class="dropdown">
-							<button class="dropbtn">Избор...</button>
-							<div class="dropdown-content">
-								<a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a
-									href="#">4</a> <a href="#">5</a> <a href="#">6</a>
-							</div>
-						</div>
-					</center></td>
-			</tr>
 		</table>
 	</center>
 	<br>
@@ -238,27 +193,27 @@
 							//		console.log("state: " + this.readyState + "status: " + this.status);
 							//		console.log("res: " + teachers);
 									
+								var button = document.createElement('button');
+									button.className = "dropbtn";
+									button.innerHTML = "Избор...";
+							
 									var teach = JSON.parse(teachers);
 									
 					
-									for (j = 0; j < teach.length; j++) {
+									for (j = 0; j < teach.length; j++) (function(j){
 										var content = teach[j].name;
 										
 										console.log("aaaaa" + content);
 										var a = document.createElement('a');
 										a.innerHTML = content;
 										a.id = i;
-					
+										a.onclick = function() {
+											button.innerHTML = content;
+											
+										}
 										dropDownContent.appendChild(a);
-									}
+									})(j);
 									
-									//dropDownContent.appendChild(dropDownC);
-									//console.log("izwan async F -> " + teachersContent);
-									
-									var button = document.createElement('button');
-									button.className = "dropbtn";
-									button.innerHTML = "Избор...";
-							
 									
 									dropDown.appendChild(button);
 									dropDown.appendChild(dropDownContent);
