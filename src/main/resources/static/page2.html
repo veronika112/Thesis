@@ -3,22 +3,22 @@
 <head>
 <style>
 #subjects {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 60%;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	width: 60%;
 }
 
 #subjects td, #subjects th {
-    border: 1px solid #ddd;
-    padding: 8px;
+	border: 1px solid #ddd;
+	padding: 8px;
 }
 
 #subjects th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #7DBBE8;
-    color: white;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+	background-color: #7DBBE8;
+	color: white;
 }
 
 .button {
@@ -32,7 +32,6 @@
 	font-size: 16px;
 	position: absolute;
 }
-
 
 .dropbtn {
 	background-color: #B7C1C8;
@@ -81,103 +80,143 @@
 .dropdown:hover .dropbtn {
 	background-color: #D3E5F2;
 }
-
 </style>
 </head>
 <body>
 
-<center>
-<div style="text-align: center">
-	<h1>Генератор на учебна програма!</h1>
+	<center>
+		<div style="text-align: center">
+			<h1>Генератор на учебна програма!</h1>
+			<br>
+			<h2 id="h2"></h2>
+		</div>
+		<br> <br> <br>
+		<table id="subjects">
+			<tr>
+				<th>№</th>
+				<th>Предмет</th>
+				<th>Брой лекции</th>
+				<th>Брой упражнения</th>
+				<th>Избор на преподавател</th>
+			</tr>
+			<tr>
+				<td>Alfreds Futterkiste</td>
+				<td>Maria Anders</td>
+				<td>Maria Anders</td>
+				<td>Maria Anders</td>
+				<td><center>
+						<div class="dropdown">
+							<button class="dropbtn">Избор...</button>
+							<div class="dropdown-content">
+								<a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a
+									href="#">4</a> <a href="#">5</a> <a href="#">6</a>
+							</div>
+						</div>
+					</center></td>
+			</tr>
+			<tr>
+				<td>Berglunds snabbköp</td>
+				<td>Christina Berglund</td>
+				<td>Maria Anders</td>
+				<td>Maria Anders</td>
+				<td><center>
+						<div class="dropdown">
+							<button class="dropbtn">Избор...</button>
+							<div class="dropdown-content">
+								<a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a
+									href="#">4</a> <a href="#">5</a> <a href="#">6</a>
+							</div>
+						</div>
+					</center></td>
+			</tr>
+			<tr>
+				<td>Centro comercial Moctezuma</td>
+				<td>Francisco Chang</td>
+				<td>Maria Anders</td>
+				<td>Maria Anders</td>
+				<td><center>
+						<div class="dropdown">
+							<button class="dropbtn">Избор...</button>
+							<div class="dropdown-content">
+								<a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a
+									href="#">4</a> <a href="#">5</a> <a href="#">6</a>
+							</div>
+						</div>
+					</center></td>
+			</tr>
+		</table>
+	</center>
 	<br>
-	<h2>Списък от предмети за {N} семестър за специалност ИТИ:</h2>
-</div>
-<br>
-<br>
-<br>
-<div>
-<table  id="subjects">
-  <tr>
-    <th>№</th>
-    <th>Предмет</th>
-	<th>Брой лекции</th>
-	<th>Брой упражнения</th>
-    <th>Избор на преподавател</th>
-  </tr>
-  <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-	<td>Maria Anders</td>
-	<td>Maria Anders</td>
-    <td><center>
-	<div class="dropdown">
-		<button class="dropbtn">Избор...</button>
-		<div class="dropdown-content">
-			<a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a>
-			<a href="#">5</a> <a href="#">6</a>
-		</div>
-	</div></center>
-	</td>
-  </tr>
-  <tr>
-    <td>Berglunds snabbköp</td>
-    <td>Christina Berglund</td>
-	<td>Maria Anders</td>
-	<td>Maria Anders</td>
-    <td><center>
-	<div class="dropdown">
-		<button class="dropbtn">Избор...</button>
-		<div class="dropdown-content">
-			<a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a>
-			<a href="#">5</a> <a href="#">6</a>
-		</div>
-	</div></center>
-	</td>
-  </tr>
-  <tr>
-    <td>Centro comercial Moctezuma</td>
-    <td>Francisco Chang</td>
-	<td>Maria Anders</td>
-	<td>Maria Anders</td>
-    <td><center>
-	<div class="dropdown">
-		<button class="dropbtn">Избор...</button>
-		<div class="dropdown-content">
-			<a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a>
-			<a href="#">5</a> <a href="#">6</a>
-		</div>
-	</div></center>
-	</td>
-  </tr>
-</table>
-</div>
-</center>
-<br>
-<br>
-<br>
-<br>
-<div>
-<button style="left: 20%;" class="button" >Назад</button>
-<button style="left: 70%;" class="button" >Продължи</button>
-</div>
+	<br>
+	<br>
+	<br>
+	<div>
+		<button style="left: 20%;" class="button">Назад</button>
+		<button style="left: 70%;" class="button">Продължи</button>
+	</div>
 
-<script>
-	var id = 5;
-	var groups = 4;
+	<script>
+		var id = 5;
+		var groups = 4;
 	
-	function process(){
-		console.log("processs");
-		
-		var url = "page3.html?";
-		var s="";
-		for (var i=0;i< myArray.length;i++)
-		{
-		  s+="&myArray="+myArray[i];
+		function process() {
+			console.log("processs");
+	
+			var url = "page3.html?";
+			var s = "";
+			for (var i = 0; i < myArray.length; i++) {
+				s += "&myArray=" + myArray[i];
+			}
+			var page_3 = "http://server/context?453019234" + s;
+			window.location.href = page_2;
 		}
-		var page_3="http://server/context?453019234"+s;
-		
-		window.location.href = page_2;
-	}
+	
+		window.onload = function getSemesters() {
+			console.log("getSemesters");
+	
+			var urlParams = new URLSearchParams(window.location.search);
+			var semesterId = urlParams.get('semesterId');
+			console.log(urlParams);
+	
+			document.getElementById("h2").innerHTML = "Списък от предмети за семестър №" + (parseInt(semesterId, 10) + 1) + " за специалност ИТИ:";
+	
+	
+			var xhttp = new XMLHttpRequest();
+			var subjects = null;
+			xhttp.onreadystatechange = function() {
+				console.log("state: " + this.readyState + "status: " + this.status);
+				if (this.readyState == 4 && this.status == 200) {
+					subjects = this.responseText;
+					var sub = JSON.parse(subjects);
+					var subjectTable = document.getElementById('subjects');
+	
+					for (i = 0; i < sub.length; i++) {
+						
+						var tr = document.createElement('tr');
+						var tdNum = document.createElement('td');
+						tdNum.innerHTML = (i+1);
+						
+						var tdName = document.createElement('td');
+						tdName.innerHTML = sub[i].name;
+						
+						var tdLec = document.createElement('td');
+						tdLec.innerHTML = sub[i].lecture_num;
+						
+						var tdEx = document.createElement('td');
+						tdEx.innerHTML = sub[i].exercises_num;
+						
+						tr.appendChild(tdNum);
+						tr.appendChild(tdName);
+						tr.appendChild(tdLec);
+						tr.appendChild(tdEx);
+	
+						subjectTable.appendChild(tr);
+					}
+				}
+			}
+			xhttp.open("GET", "/subjects/semester?id=" + (parseInt(semesterId, 10) + 1), true);
+			xhttp.send();
+		}
 	</script>
 </body>
 </html>
