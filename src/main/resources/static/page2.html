@@ -172,11 +172,11 @@
 		}
 	
 		window.onload = function getSemesters() {
-			console.log("getSemesters");
+		//	console.log("getSemesters");
 	
 			var urlParams = new URLSearchParams(window.location.search);
 			var semesterId = urlParams.get('semesterId');
-			console.log(urlParams);
+		//	console.log(urlParams);
 	
 			document.getElementById("h2").innerHTML = "Списък от предмети за семестър №" + (parseInt(semesterId, 10) + 1) + " за специалност ИТИ:";
 	
@@ -184,13 +184,15 @@
 			var xhttp = new XMLHttpRequest();
 			var subjects = null;
 			xhttp.onreadystatechange = function() {
-				console.log("state: " + this.readyState + "status: " + this.status);
+			//	console.log("state: " + this.readyState + "status: " + this.status);
 				if (this.readyState == 4 && this.status == 200) {
 					subjects = this.responseText;
 					var sub = JSON.parse(subjects);
 					var subjectTable = document.getElementById('subjects');
 	
 					for (i = 0; i < sub.length; i++) {
+						
+						console.log("Subjects: " + i);
 						
 						var tr = document.createElement('tr');
 						var tdNum = document.createElement('td');
@@ -223,22 +225,24 @@
 						dropDownContent.className = "dropdown-content";
 						
 						<!-- var teachersContent = function() { -->
-							console.log("fetch teachers - " + i);
+						//	console.log("fetch teachers - " + i);
 							
 							var teachers = null;
 							var xhttp = new XMLHttpRequest();
 							xhttp.onreadystatechange = function() {
-								console.log("state: " + this.readyState + "status: " + this.status);
+							//	console.log("state: " + this.readyState + "status: " + this.status);
 								if (this.readyState == 4 && this.status == 200) {
 									teachers = this.responseText;
-									console.log("state: " + this.readyState + "status: " + this.status);
-									console.log("res: " + teachers);
+									
+									console.log("Wutreshniq callback!");
+							//		console.log("state: " + this.readyState + "status: " + this.status);
+							//		console.log("res: " + teachers);
 									
 									var teach = JSON.parse(teachers);
 									
 					
-									for (i = 0; i < teach.length; i++) {
-										var content = teach[i].name;
+									for (j = 0; j < teach.length; j++) {
+										var content = teach[j].name;
 										
 										console.log("aaaaa" + content);
 										var a = document.createElement('a');
@@ -262,8 +266,6 @@
 									
 									tdDropDown.appendChild(dropDown);
 									
-									
-									
 								}
 								
 							};
@@ -276,17 +278,17 @@
 							
 							subjectTable.appendChild(tr);
 							
-							xhttp.open("GET", "/teachers/bySubject?id="+i+"&type=true", true);
+							xhttp.open("GET", "/teachers/bySubject?id="+(i+1) +"&type=true", false);
 							xhttp.send();
 							<!--return teachers; -->
 					<!--	} -->
 						
 					
 						
-					}
+					} // for Subject
 				}
 			}
-			xhttp.open("GET", "/subjects/semester?id=" + (parseInt(semesterId, 10) + 1), true);
+			xhttp.open("GET", "/subjects/semester?id=" + (parseInt(semesterId, 10) + 1), false);
 			xhttp.send();
 		}
 	</script>
