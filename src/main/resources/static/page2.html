@@ -205,12 +205,84 @@
 						var tdEx = document.createElement('td');
 						tdEx.innerHTML = sub[i].exercises_num;
 						
-						tr.appendChild(tdNum);
-						tr.appendChild(tdName);
-						tr.appendChild(tdLec);
-						tr.appendChild(tdEx);
-	
-						subjectTable.appendChild(tr);
+				//		tr.appendChild(tdNum);
+				//		tr.appendChild(tdName);
+					//	tr.appendChild(tdLec);
+					//	tr.appendChild(tdEx);
+						
+						<!-- td -->
+						var tdDropDown = document.createElement('td');
+						
+						<!--td dropdown -->
+						var dropDown = document.createElement('div');
+						dropDown.className = "dropdown";
+						
+						
+						var dropDownContent = document.createElement('div');
+						dropDownContent.id = "dropDownCon"
+						dropDownContent.className = "dropdown-content";
+						
+						<!-- var teachersContent = function() { -->
+							console.log("fetch teachers - " + i);
+							
+							var teachers = null;
+							var xhttp = new XMLHttpRequest();
+							xhttp.onreadystatechange = function() {
+								console.log("state: " + this.readyState + "status: " + this.status);
+								if (this.readyState == 4 && this.status == 200) {
+									teachers = this.responseText;
+									console.log("state: " + this.readyState + "status: " + this.status);
+									console.log("res: " + teachers);
+									
+									var teach = JSON.parse(teachers);
+									
+					
+									for (i = 0; i < teach.length; i++) {
+										var content = teach[i].name;
+										
+										console.log("aaaaa" + content);
+										var a = document.createElement('a');
+										a.innerHTML = content;
+										a.id = i;
+					
+										dropDownContent.appendChild(a);
+									}
+									
+									//dropDownContent.appendChild(dropDownC);
+									//console.log("izwan async F -> " + teachersContent);
+									
+									var button = document.createElement('button');
+									button.className = "dropbtn";
+									button.innerHTML = "Избор...";
+							
+									
+									dropDown.appendChild(button);
+									dropDown.appendChild(dropDownContent);
+									
+									
+									tdDropDown.appendChild(dropDown);
+									
+									
+									
+								}
+								
+							};
+							
+							tr.appendChild(tdNum);
+							tr.appendChild(tdName);
+							tr.appendChild(tdLec);
+							tr.appendChild(tdEx);
+							tr.appendChild(tdDropDown);
+							
+							subjectTable.appendChild(tr);
+							
+							xhttp.open("GET", "/teachers/bySubject?id="+i+"&type=true", true);
+							xhttp.send();
+							<!--return teachers; -->
+					<!--	} -->
+						
+					
+						
 					}
 				}
 			}
