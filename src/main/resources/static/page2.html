@@ -1,0 +1,183 @@
+<meta charset="utf-8" />
+<html>
+<head>
+<style>
+#subjects {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 60%;
+}
+
+#subjects td, #subjects th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#subjects th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #7DBBE8;
+    color: white;
+}
+
+.button {
+	background-color: #7DBBE8; /* Blue */
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	position: absolute;
+}
+
+
+.dropbtn {
+	background-color: #B7C1C8;
+	color: black;
+	padding: 16px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #f9f9f9;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+	background-color: #f1f1f1
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+	background-color: #D3E5F2;
+}
+
+</style>
+</head>
+<body>
+
+<center>
+<div style="text-align: center">
+	<h1>Генератор на учебна програма!</h1>
+	<br>
+	<h2>Списък от предмети за {N} семестър за специалност ИТИ:</h2>
+</div>
+<br>
+<br>
+<br>
+<div>
+<table  id="subjects">
+  <tr>
+    <th>№</th>
+    <th>Предмет</th>
+	<th>Брой лекции</th>
+	<th>Брой упражнения</th>
+    <th>Избор на преподавател</th>
+  </tr>
+  <tr>
+    <td>Alfreds Futterkiste</td>
+    <td>Maria Anders</td>
+	<td>Maria Anders</td>
+	<td>Maria Anders</td>
+    <td><center>
+	<div class="dropdown">
+		<button class="dropbtn">Избор...</button>
+		<div class="dropdown-content">
+			<a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a>
+			<a href="#">5</a> <a href="#">6</a>
+		</div>
+	</div></center>
+	</td>
+  </tr>
+  <tr>
+    <td>Berglunds snabbköp</td>
+    <td>Christina Berglund</td>
+	<td>Maria Anders</td>
+	<td>Maria Anders</td>
+    <td><center>
+	<div class="dropdown">
+		<button class="dropbtn">Избор...</button>
+		<div class="dropdown-content">
+			<a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a>
+			<a href="#">5</a> <a href="#">6</a>
+		</div>
+	</div></center>
+	</td>
+  </tr>
+  <tr>
+    <td>Centro comercial Moctezuma</td>
+    <td>Francisco Chang</td>
+	<td>Maria Anders</td>
+	<td>Maria Anders</td>
+    <td><center>
+	<div class="dropdown">
+		<button class="dropbtn">Избор...</button>
+		<div class="dropdown-content">
+			<a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a>
+			<a href="#">5</a> <a href="#">6</a>
+		</div>
+	</div></center>
+	</td>
+  </tr>
+</table>
+</div>
+</center>
+<br>
+<br>
+<br>
+<br>
+<div>
+<button style="left: 20%;" class="button" >Назад</button>
+<button style="left: 70%;" class="button" >Продължи</button>
+</div>
+
+<script>
+	var id = 5;
+	var groups = 4;
+	
+	function process(){
+		console.log("processs");
+		
+		var url = "page3.html?";
+		var s="";
+		for (var i=0;i< myArray.length;i++)
+		{
+		  s+="&myArray="+myArray[i];
+		}
+		var page_3="http://server/context?453019234"+s;
+		
+		window.location.href = page_2;
+	}
+	</script>
+</body>
+</html>

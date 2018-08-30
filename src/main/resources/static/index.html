@@ -1,0 +1,201 @@
+<html>
+<head>
+<style>
+/* Style The Dropdown Button */
+.dropbtn {
+	background-color: #B7C1C8;
+	color: black;
+	padding: 16px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #f9f9f9;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+	background-color: #f1f1f1
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+	background-color: #D3E5F2;
+}
+
+.button {
+	background-color: #7DBBE8; /* Blue */
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	position: absolute;
+	left: 70%;
+}
+</style>
+</head>
+<body>
+	<!--The content below is only a placeholder and can be replaced.-->
+
+	<meta charset="utf-8" />
+	<div style="text-align: center">
+		<h1>Генератор на учебна програма!</h1>
+		<img width="300" alt="Angular Logo" src="./logo.png">
+	</div>
+	<div style="text-align: center">
+		<h2>Генерирайте учебната програма за семестър на специалност ИТИ:
+		</h2>
+		<br> <br>
+		<div class="dropdown">
+			<button id="dropdown1btn" class="dropbtn">Семестър</button>
+			<div id="semest" class="dropdown-content"></div>
+		</div>
+		&nbsp; &nbsp;
+		<div class="dropdown">
+			<button id="btn2" class="dropbtn">Брой групи</button>
+			<div id="dropdown2" class="dropdown-content">
+				<a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a>
+				<a href="#">5</a> <a href="#">6</a>
+			</div>
+		</div>
+	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div>
+		<button class="button" onclick="process()">Продължи</button>
+	</div>
+	<script>
+		var sendToNextPageId = -1;
+		var sendToNextPageGroups = -1;
+	
+		function process() {
+			console.log("processs ");
+	
+			if (sendToNextPageId < 0 || sendToNextPageGroups < 0) {
+				alert("Моля изберете параметри!");
+			} else {
+	
+				var url = "page2.html?";
+				var queryVars = {
+					'semesterId' : sendToNextPageId,
+					'groups' : sendToNextPageGroups
+				};
+	
+				var page_2 = appendQueryString(url, queryVars);
+	
+				window.location.href = page_2;
+			}
+		}
+	
+		function appendQueryString(url, queryVars) {
+			var firstSeperator = (url.indexOf('?') == -1 ? '?' : '&');
+			var queryStringParts = new Array();
+			for (var key in queryVars) {
+				queryStringParts.push(key + '=' + queryVars[key]);
+			}
+			var queryString = queryStringParts.join('&');
+			return url + firstSeperator + queryString;
+		}
+	
+		window.onload = function getSemesters() {
+			console.log("getSemesters");
+			var semesters = null;
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				console.log("state: " + this.readyState + "status: " + this.status);
+				if (this.readyState == 4 && this.status == 200) {
+					semesters = this.responseText;
+					console.log("state: " + this.readyState + "status: " + this.status);
+					console.log("res: " + semesters);
+					var sem = JSON.parse(semesters);
+					var semestId = document.getElementById('semest');
+	
+					for (i = 0; i < sem.length; i++) {
+						var content = sem[i].name;
+						var a = document.createElement('a');
+						a.innerHTML = content;
+						a.id = i;
+	
+						semestId.appendChild(a);
+					}
+	
+					var semestId2 = document.getElementById('semest');
+	
+					var buttonContent = document.getElementById("dropdown1btn");
+					var childs = semestId2.children;
+					<!-- dobawqme onClick funkciqta na wseki element ot dropdown 1 -->
+					for (i = 0; i < childs.length; i++) (function(i) {
+							console.log("!!!!!!!!!!!!!!!!!!! " + childs[i].innerHTML);
+							var currentChild = childs[i].innerHTML;
+							childs[i].onclick = function() {
+	
+								console.log("ppppppppppppppppppp" + currentChild);
+								console.log(i);
+								var name = currentChild;
+	
+								buttonContent.innerHTML = name;
+								sendToNextPageId = i;
+							}
+						})(i);
+	
+	
+					<!-- dobawqme onClick funkciqta na wseki element ot dropdown 2 -->
+					var buttonContent2 = document.getElementById("btn2");
+					var childs2 = document.getElementById("dropdown2").children;
+	
+					for (j = 0; j < childs2.length; j++) (function(j) {
+							console.log("!!!!!!!!!!!!!!!!!!! " + childs2[j].innerHTML);
+							var currentChild = childs2[j].innerHTML;
+							childs2[j].onclick = function() {
+	
+								var name = currentChild;
+	
+								buttonContent2.innerHTML = name;
+								sendToNextPageGroups = j;
+							}
+						})(j);
+	
+	
+					// Then append the whole thing onto the body
+					console.log("res: " + sem.length);
+				}
+			};
+			xhttp.open("GET", "/semesters/all", true);
+			xhttp.send();
+			return semesters;
+		}
+	</script>
+</body>
+</html>
