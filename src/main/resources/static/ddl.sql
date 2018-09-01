@@ -74,3 +74,7 @@ CREATE TABLE Teachers_Subjects (
 
 INSERT INTO Teachers_Subjects (teachers_id, subjects_id, isLecture) VALUES (1, 3, true), (1, 5, true), (2, 3, true), (2, 3, false);
 
+INSERT INTO teachers (name) VALUES ('Александър Александров'), ('Петър Петров'), ('Стоян Стоянов') , ('Симеон Симеонов'), ('Драган Драганов'), ('Боян Боянов'), ('Цветомир Цвветомиров'), ('Георги Георгиев');
+
+
+INSERT INTO teachers_subjects VALUES (4,1, true), (4,2, true), (5,5, true), (6,3, true),(6,7, true), (7,5, true), (8,3, true),(8,2, true), (9,2, true),(9,1, true), (10,4, true),(10,8, true),(10,6, true), (11,1, true),(11,2, true), (11,3, true),(11,6, true);
