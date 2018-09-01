@@ -117,14 +117,25 @@
 	
 		function process() {
 			console.log("processs");
-	
-			var url = "page3.html?";
-			var s = "";
-			for (var i = 0; i < myArray.length; i++) {
-				s += "&myArray=" + myArray[i];
+			var flag = true;
+			var subj = document.getElementById('subjects').getElementsByTagName('tr');
+			console.log("subjects: " + subj);
+			
+			for( var i=1; i<subj.length; i++){
+				console.log("Subj: "+subj[i].innerHTML);console.log("element 4: " + subj[i].children[4].innerHTML);
+				var temp = subj[i].children[4].children[0].innerHTML;
+				console.log(temp);
+				if (subj[i].children[4].innerHTML.indexOf('Избор...') !== -1){
+					flag = false;
+				}
 			}
-			var page_3 = "http://server/context?453019234" + s;
-			window.location.href = page_2;
+			
+			if(flag == false){
+				alert("Моля, попълнете всички преподаватели!");
+			} else {
+				console.log("preminawame kam stranica 3")
+			//	window.location.href = "page3.html";
+			}
 		}
 	
 		function back() {
