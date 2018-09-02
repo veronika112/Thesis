@@ -43,6 +43,91 @@
 	text-decoration: none;
 	display: inline-block;
 }
+
+.responsive-table-input-matrix {
+		display: block;
+		position: relative;
+		width: 100%;
+
+		&:after {
+			clear: both;
+			content: '';
+			display: block;
+			font-size: 0;
+			height: 0;
+			visibility: hidden;
+		}
+
+		tbody {
+			display: block;
+			overflow-x: auto;
+			position: relative;
+			white-space: nowrap;
+			width: auto;
+
+
+			tr {
+				display: inline-block;
+				vertical-align: top;
+
+				td {
+					display: block;
+					text-align: center;
+
+					&:first-child {
+						text-align: left;
+					}
+				}
+			}
+		}
+
+		thead {
+			display: block;
+			float: left;
+			margin-right: 10px;
+
+			&:after {
+				clear: both;
+				content: "";
+				display: block;
+				font-size: 0;
+				height: 0;
+				visibility: hidden;
+			}
+
+			th:first-of-type {
+				height: 1.4em;
+			}
+
+			th {
+				display: block;
+				text-align: right;
+
+				&:first-child {
+					text-align: right;
+				}
+			}
+		}
+	}
+	
+	
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+}
+
+th { 
+  background: #7DBBE8; 
+  color: white; 
+  font-weight: bold; 
+}
+td, th { 
+  padding: 6px; 
+  border: 1px solid #ccc; 
+  text-align: left; 
+}
+	
+
 </style>
 </head>
 <body>
@@ -57,29 +142,67 @@
 <br>
 <br>
 <br>
-<table  id="teachers">
-  <tr>
-    <th>№</th>
-    <th>Преподавател</th>
-    <th>Претенции</th>
-  </tr>
-  <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td><center><button class="button2" >Избор</button></center></td>
-  </tr>
-  <tr>
-    <td>Berglunds snabbköp</td>
-    <td>Christina Berglund</td>
-    <td><center><button class="button2" >Избор</button></center></td>
-  </tr>
-  <tr>
-    <td>Centro comercial Moctezuma</td>
-    <td>Francisco Chang</td>
-    <td><center><button class="button2" >Избор</button></center></td>
-  </tr>
-</table>
-</center>
+		<table id="teachers">
+			<tr>
+				<th>№</th>
+				<th>Преподавател</th>
+				<th>Претенции</th>
+			</tr>
+			<tr>
+				<td>Alfreds Futterkiste</td>
+				<td>Maria Anders</td>
+				<td><center>
+						<button class="button2" onClick="getTimetable()">Избор</button>
+					</center></td>
+			</tr>
+			<tr>
+				<td>Berglunds snabbköp</td>
+				<td>Christina Berglund</td>
+				<td><center>
+						<button class="button2" onClick="getTimetable()">Избор</button>
+					</center></td>
+			</tr>
+			<tr>
+				<td>Centro comercial Moctezuma</td>
+				<td>Francisco Chang</td>
+				<td><center>
+						<button class="button2" onClick="getTimetable()">Избор</button>
+					</center></td>
+			</tr>
+		</table>
+	</center>
+	
+	
+	<h3>Permissions Table</h3>
+<table class="responsive-table-input-matrix">
+		<thead>
+		<tr>
+			<th></th>
+			<th>Owner</th>
+			<th>Group</th>
+			<th>Others</th>
+			<th>Administrators</th>
+		</thead>
+		<tbody>
+
+		<tr>
+			<td>Add</td>
+			<td><input type="checkbox"></td>
+			<td><input type="checkbox"></td>
+			<td><input type="checkbox"></td>
+			<td><input type="checkbox"></td>
+			
+		</tr>
+		<tr>
+			<td>Edit</td>
+			<td><input type="checkbox"></td>
+			<td><input type="checkbox"></td>
+			<td><input type="checkbox"></td>
+			<td><input type="checkbox"></td>
+		
+		</tr>
+	</tbody>
+	</table>
 <br>
 <br>
 <br>
@@ -88,5 +211,20 @@
 <button style="left: 20%;" class="button" >Назад</button>
 <button style="left: 70%;" class="button" >Генериране</button>
 </div>
+
+
+<script>
+
+window.onload = function load(){
+	var lastname = sessionStorage.getItem("1");
+	console.log(lastname);
+} 
+
+function getTimetable(){
+
+	
+}
+
+</script>
 </body>
 </html>

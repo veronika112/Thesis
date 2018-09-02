@@ -122,9 +122,6 @@
 			console.log("subjects: " + subj);
 			
 			for( var i=1; i<subj.length; i++){
-				console.log("Subj: "+subj[i].innerHTML);console.log("element 4: " + subj[i].children[4].innerHTML);
-				var temp = subj[i].children[4].children[0].innerHTML;
-				console.log(temp);
 				if (subj[i].children[4].innerHTML.indexOf('Избор...') !== -1){
 					flag = false;
 				}
@@ -133,8 +130,8 @@
 			if(flag == false){
 				alert("Моля, попълнете всички преподаватели!");
 			} else {
-				console.log("preminawame kam stranica 3")
-			//	window.location.href = "page3.html";
+				console.log("preminawame kam stranica 3");
+				window.location.href = "page3.html";
 			}
 		}
 	
@@ -142,7 +139,6 @@
 			var url = "/";
 				
 			window.location.href = url;
-	
 		}
 	
 		function appendQueryString(url, queryVars) {
@@ -178,9 +174,10 @@
 					var subjectTable = document.getElementById('subjects');
 	
 					for (i = 0; i < sub.length; i++) {
-	
+					//	var subId = sub[i].id;
 						console.log("Subjects: " + i);
-	
+			
+						
 						var tr = document.createElement('tr');
 						var tdNum = document.createElement('td');
 						tdNum.innerHTML = (i + 1);
@@ -194,11 +191,7 @@
 						var tdEx = document.createElement('td');
 						tdEx.innerHTML = sub[i].exercises_num;
 	
-						//		tr.appendChild(tdNum);
-						//		tr.appendChild(tdName);
-						//	tr.appendChild(tdLec);
-						//	tr.appendChild(tdEx);
-	
+							
 						<!-- td -->
 						var tdDropDown = document.createElement('td');
 	
@@ -211,9 +204,6 @@
 						dropDownContent.id = "dropDownCon"
 						dropDownContent.className = "dropdown-content";
 	
-						<!-- var teachersContent = function() { -->
-						//	console.log("fetch teachers - " + i);
-	
 						var teachers = null;
 						var xhttp = new XMLHttpRequest();
 						xhttp.onreadystatechange = function() {
@@ -222,8 +212,6 @@
 								teachers = this.responseText;
 	
 								console.log("Wutreshniq callback!");
-								//		console.log("state: " + this.readyState + "status: " + this.status);
-								//		console.log("res: " + teachers);
 	
 								var button = document.createElement('button');
 								button.className = "dropbtn";
@@ -234,14 +222,20 @@
 	
 								for (j = 0; j < teach.length; j++) (function(j) {
 										var content = teach[j].name;
-	
-										console.log("aaaaa" + content);
+										var teachId = teach[j].id;
+										var subId = sub[i].id;
+										
 										var a = document.createElement('a');
 										a.innerHTML = content;
 										a.id = i;
 										a.onclick = function() {
 											button.innerHTML = content;
-	
+										// tuk w obshtata pamet zapiswame stoinosti K-V, za da pazim Predmet-Prepodawatel
+										// key -> id-to na subject [istinskoto id ot bazata], value id-to na prepodawatelq 
+											console.log("Key: " + i + "-"+ sub.length + ", VALUE: " + teachId +";"+subId);	
+											
+											sessionStorage.setItem(subId, teachId);
+											
 										}
 										dropDownContent.appendChild(a);
 									})(j);
@@ -267,10 +261,6 @@
 	
 						xhttp.open("GET", "/teachers/bySubject?id=" + (i + 1) + "&type=true", false);
 						xhttp.send();
-						<!--return teachers; -->
-						<!--	} -->
-	
-	
 	
 					} // for Subject
 				}
