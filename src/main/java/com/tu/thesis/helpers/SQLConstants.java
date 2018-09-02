@@ -21,6 +21,7 @@ public class SQLConstants {
 	// SQL Prepared statements for Teachers object
 	public static final String GET_ALL_ROOMS = "select * from Rooms;";
 	public static final String GET_ROOM_BY_ID = "select * from Rooms where id = ?;";
+	public static final String GET_ROOM_BY_TYPE = "select * from Rooms where isLecture = ?;";
 	public static final String DELETE_ROOM_BY_ID = "delete from Rooms where id = ?";
 	public static final String INSERT_ROOM = "insert into Rooms(id, isLecture) VALUES (?, ?);";
 	

@@ -224,6 +224,7 @@
 										var content = teach[j].name;
 										var teachId = teach[j].id;
 										var subId = sub[i].id;
+										var currentI = i;
 										
 										var a = document.createElement('a');
 										a.innerHTML = content;
@@ -232,9 +233,9 @@
 											button.innerHTML = content;
 										// tuk w obshtata pamet zapiswame stoinosti K-V, za da pazim Predmet-Prepodawatel
 										// key -> id-to na subject [istinskoto id ot bazata], value id-to na prepodawatelq 
-											console.log("Key: " + i + "-"+ sub.length + ", VALUE: " + teachId +";"+subId);	
+											console.log("Key: " + currentI + "-"+ sub.length + ", VALUE: " + subId  +";"+teachId);	
 											
-											sessionStorage.setItem(subId, teachId);
+											sessionStorage.setItem(currentI+"-"+sub.length, subId +";"+teachId);
 											
 										}
 										dropDownContent.appendChild(a);

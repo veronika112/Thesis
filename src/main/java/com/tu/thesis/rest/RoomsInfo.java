@@ -21,6 +21,12 @@ public class RoomsInfo {
 
 		return RoomsImpl.retrieveAllRooms();
 	}
+	
+	@RequestMapping(value = "/rooms/allByType", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<Rooms> roomsByType(@RequestParam("type") boolean type) throws ClassNotFoundException, SQLException {
+
+		return RoomsImpl.retrieveAllRoomsByType(type);
+	}
 
 	@RequestMapping(value = "/rooms/byId", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Rooms> roomsById(@RequestParam("id") int id) throws ClassNotFoundException, SQLException {

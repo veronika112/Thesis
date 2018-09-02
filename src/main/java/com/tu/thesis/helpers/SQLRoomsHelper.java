@@ -80,4 +80,20 @@ public class SQLRoomsHelper {
 		return;
 	}
 
+	public List<Rooms> retrieveAllRoomsByType(String getRoomByType, boolean type) throws SQLException {
+		PreparedStatement preparedStatement = conn.prepareStatement(getRoomByType);
+		preparedStatement.setBoolean(1, type);
+		
+		List<Rooms> retrievedRooms = new ArrayList<>(); 
+		ResultSet rs = preparedStatement.executeQuery();
+
+		while (rs.next()) {
+			int id = rs.getInt("id");
+			boolean isLecture = rs.getBoolean("isLecture");
+
+			retrievedRooms.add(new Rooms(id, isLecture));
+		}
+		return retrievedRooms;
+	}
+
 }

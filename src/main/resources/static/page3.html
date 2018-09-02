@@ -3,22 +3,22 @@
 <head>
 <style>
 #teachers {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 60%;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	width: 60%;
 }
 
 #teachers td, #teachers th {
-    border: 1px solid #ddd;
-    padding: 8px;
+	border: 1px solid #ddd;
+	padding: 8px;
 }
 
 #teachers th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #7DBBE8;
-    color: white;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+	background-color: #7DBBE8;
+	color: white;
 }
 
 .button {
@@ -45,186 +45,316 @@
 }
 
 .responsive-table-input-matrix {
-		display: block;
-		position: relative;
-		width: 100%;
-
-		&:after {
-			clear: both;
-			content: '';
-			display: block;
-			font-size: 0;
-			height: 0;
-			visibility: hidden;
-		}
-
-		tbody {
-			display: block;
-			overflow-x: auto;
-			position: relative;
-			white-space: nowrap;
-			width: auto;
-
-
-			tr {
-				display: inline-block;
-				vertical-align: top;
-
-				td {
-					display: block;
-					text-align: center;
-
-					&:first-child {
-						text-align: left;
-					}
-				}
-			}
-		}
-
-		thead {
-			display: block;
-			float: left;
-			margin-right: 10px;
-
-			&:after {
-				clear: both;
-				content: "";
-				display: block;
-				font-size: 0;
-				height: 0;
-				visibility: hidden;
-			}
-
-			th:first-of-type {
-				height: 1.4em;
-			}
-
-			th {
-				display: block;
-				text-align: right;
-
-				&:first-child {
-					text-align: right;
-				}
-			}
-		}
-	}
-	
-	
-table { 
-  width: 100%; 
-  border-collapse: collapse; 
+	display: block;
+	position: relative;
+	width: 100%; &: after { clear : both;
+	content: '';
+	display: block;
+	font-size: 0;
+	height: 0;
+	visibility: hidden;
 }
 
-th { 
-  background: #7DBBE8; 
-  color: white; 
-  font-weight: bold; 
+tbody {
+	display: block;
+	overflow-x: auto;
+	position: relative;
+	white-space: nowrap;
+	width: auto; tr { display : inline-block;
+	vertical-align: top; td { display : block;
+	text-align: center;
+	&:
+	first-child
+	{
+	text-align
+	:
+	left;
 }
-td, th { 
-  padding: 6px; 
-  border: 1px solid #ccc; 
-  text-align: left; 
+
 }
-	
+}
+}
+thead {
+	display: block;
+	float: left;
+	margin-right: 10px; &: after { clear : both;
+	content: "";
+	display: block;
+	font-size: 0;
+	height: 0;
+	visibility: hidden;
+}
+
+th:first-of-type {
+	height: 1.4em;
+}
+
+th {
+	display: block;
+	text-align: right;
+	&:
+	first-child
+	{
+	text-align
+	:
+	right;
+}
+
+}
+}
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th {
+	background: #7DBBE8;
+	color: white;
+	font-weight: bold;
+}
+
+td, th {
+	padding: 6px;
+	border: 1px solid #ccc;
+	text-align: left;
+}
+
+
+.button {
+	background-color: #7DBBE8; /* Blue */
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	position: absolute;
+}
+
+.dropbtn {
+	background-color: #B7C1C8;
+	color: black;
+	padding: 16px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #f9f9f9;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+	background-color: #f1f1f1
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+	background-color: #D3E5F2;
+}
 
 </style>
 </head>
 <body>
-<meta charset="utf-8" />
-<center>
+	<meta charset="utf-8" />
+	<center>
 
-<div style="text-align: center">
-	<h1>Генератор на учебна програма!</h1>
-	<br>
-	<h2>Списък на избраните лекционните преподаватели за {N} семестър: </h2>
-</div>
-<br>
-<br>
-<br>
+		<div style="text-align: center">
+			<h1>Генератор на учебна програма!</h1>
+			<br>
+			<h2>Списък на избраните лекционните преподаватели за {N}
+				семестър:</h2>
+		</div>
+		<br> <br> <br>
 		<table id="teachers">
 			<tr>
 				<th>№</th>
 				<th>Преподавател</th>
-				<th>Претенции</th>
-			</tr>
-			<tr>
-				<td>Alfreds Futterkiste</td>
-				<td>Maria Anders</td>
-				<td><center>
-						<button class="button2" onClick="getTimetable()">Избор</button>
-					</center></td>
-			</tr>
-			<tr>
-				<td>Berglunds snabbköp</td>
-				<td>Christina Berglund</td>
-				<td><center>
-						<button class="button2" onClick="getTimetable()">Избор</button>
-					</center></td>
-			</tr>
-			<tr>
-				<td>Centro comercial Moctezuma</td>
-				<td>Francisco Chang</td>
-				<td><center>
-						<button class="button2" onClick="getTimetable()">Избор</button>
-					</center></td>
+				<th>Зала</th>
 			</tr>
 		</table>
 	</center>
-	
-	
+
+
 	<h3>Permissions Table</h3>
-<table class="responsive-table-input-matrix">
+	<table class="responsive-table-input-matrix">
 		<thead>
-		<tr>
-			<th></th>
-			<th>Owner</th>
-			<th>Group</th>
-			<th>Others</th>
-			<th>Administrators</th>
+			<tr>
+				<th></th>
+				<th>Owner</th>
+				<th>Group</th>
+				<th>Others</th>
+				<th>Administrators</th>
 		</thead>
 		<tbody>
 
-		<tr>
-			<td>Add</td>
-			<td><input type="checkbox"></td>
-			<td><input type="checkbox"></td>
-			<td><input type="checkbox"></td>
-			<td><input type="checkbox"></td>
-			
-		</tr>
-		<tr>
-			<td>Edit</td>
-			<td><input type="checkbox"></td>
-			<td><input type="checkbox"></td>
-			<td><input type="checkbox"></td>
-			<td><input type="checkbox"></td>
-		
-		</tr>
-	</tbody>
+			<tr>
+				<td>Add</td>
+				<td><input type="checkbox"></td>
+				<td><input type="checkbox"></td>
+				<td><input type="checkbox"></td>
+				<td><input type="checkbox"></td>
+
+			</tr>
+			<tr>
+				<td>Edit</td>
+				<td><input type="checkbox"></td>
+				<td><input type="checkbox"></td>
+				<td><input type="checkbox"></td>
+				<td><input type="checkbox"></td>
+
+			</tr>
+		</tbody>
 	</table>
-<br>
-<br>
-<br>
-<br>
-<div>
-<button style="left: 20%;" class="button" >Назад</button>
-<button style="left: 70%;" class="button" >Генериране</button>
-</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div>
+		<button style="left: 20%;" class="button">Назад</button>
+		<button style="left: 70%;" class="button">Генериране</button>
+	</div>
 
 
-<script>
-
-window.onload = function load(){
-	var lastname = sessionStorage.getItem("1");
-	console.log(lastname);
-} 
-
-function getTimetable(){
-
+	<script>
 	
-}
-
-</script>
+		window.onload = function load() {
+	
+			var allChosedTeachersID = [];
+	
+			for (var i = 0; i < Object.values(sessionStorage).length; i++) {
+				var temp = Object.values(sessionStorage)[i];
+				if (temp.indexOf(';') != -1) {
+					allChosedTeachersID.push(temp.substring((temp.indexOf(';') + 1), temp.length));
+				}
+			}
+	
+			var roomsForLect = null;
+	
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+			
+				if (this.readyState == 4 && this.status == 200) {
+					var roomsForLectures = this.responseText;
+					console.log("Rooms: " + roomsForLectures);
+					
+					roomsForLect = JSON.parse(roomsForLectures);	
+				}
+			}
+			xhttp.open("GET", "/rooms/allByType?type=true", false);
+			xhttp.send();
+	
+		
+			var xhttp = new XMLHttpRequest();
+			var teachers = null;
+			var teachersTable = document.getElementById('teachers');
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					teachers = this.responseText;
+					var teachersName = null;
+					console.log(this.responseText);
+					var teach = JSON.parse(teachers);
+	
+					for (var j = 0; j < allChosedTeachersID.length; j++) {
+						console.log("masiwa: " + allChosedTeachersID[j]);
+						var currentId = allChosedTeachersID[j];
+	
+						for (var k = 0; k < teach.length; k++) (function(k) {
+							if (teach[k].id == currentId) {
+								teachersName = teach[k].name;
+	
+	
+								var tr = document.createElement('tr');
+								var tdNum = document.createElement('td');
+								tdNum.innerHTML = (j + 1);
+	
+								var tdName = document.createElement('td');
+								tdName.innerHTML = teachersName;
+								
+								<!-- td -->
+								var tdDropDown = document.createElement('td');
+			
+								<!--td dropdown -->
+								var dropDown = document.createElement('div');
+								dropDown.className = "dropdown";
+			
+			
+								var dropDownContent = document.createElement('div');
+								dropDownContent.id = "dropDownCon"
+								dropDownContent.className = "dropdown-content";
+								
+								var button = document.createElement('button');
+								button.className = "dropbtn";
+								button.innerHTML = "Избор...";
+								
+								
+								for (p = 0; p < roomsForLect.length; p++) (function(p) {
+									var content = roomsForLect[p].id;
+									
+									var a = document.createElement('a');
+									a.innerHTML = content;
+								
+									a.onclick = function() {
+										button.innerHTML = content;
+										
+									}
+									dropDownContent.appendChild(a);
+								})(p);
+	
+								dropDown.appendChild(button);
+								dropDown.appendChild(dropDownContent);
+	
+	
+								tdDropDown.appendChild(dropDown);
+								
+								
+								tr.appendChild(tdNum);
+								tr.appendChild(tdName);
+								tr.appendChild(tdDropDown);
+								
+								teachersTable.appendChild(tr);
+							}
+						})(k);
+	
+					}
+	
+				}
+			}
+			xhttp.open("GET", "/teachers/all", false);
+			xhttp.send();
+	
+		}
+	
+		function getTimetable() {
+		}
+	</script>
 </body>
 </html>

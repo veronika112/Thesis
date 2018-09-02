@@ -18,6 +18,10 @@ public class RoomsImpl {
 		return sql.retrieveAllRooms(SQLConstants.GET_ALL_ROOMS);
 	}
 	
+	public static List<Rooms> retrieveAllRoomsByType(boolean type) throws ClassNotFoundException, SQLException {
+		return sql.retrieveAllRoomsByType(SQLConstants.GET_ROOM_BY_TYPE, type);
+	}
+	
 	public static List<Rooms> retrieveAllRoomsById(int id) throws ClassNotFoundException, SQLException {
 		return sql.retrieveRoomById(SQLConstants.GET_ROOM_BY_ID, id);
 	}
