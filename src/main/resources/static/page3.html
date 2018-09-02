@@ -120,7 +120,6 @@ td, th {
 	text-align: left;
 }
 
-
 .button {
 	background-color: #7DBBE8; /* Blue */
 	border: none;
@@ -131,6 +130,17 @@ td, th {
 	display: inline-block;
 	font-size: 16px;
 	position: absolute;
+}
+
+.button2 {
+	background-color: #7DBBE8; /* Blue */
+	border: none;
+	color: white;
+	padding: 12px 16px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
 }
 
 .dropbtn {
@@ -181,6 +191,29 @@ td, th {
 	background-color: #D3E5F2;
 }
 
+/* The Modal (background) */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+	background-color: #fefefe;
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+}
 </style>
 </head>
 <body>
@@ -199,41 +232,129 @@ td, th {
 				<th>№</th>
 				<th>Преподавател</th>
 				<th>Зала</th>
+				<th>Заетост</th>
 			</tr>
 		</table>
 	</center>
 
 
-	<h3>Permissions Table</h3>
-	<table class="responsive-table-input-matrix">
-		<thead>
-			<tr>
-				<th></th>
-				<th>Owner</th>
-				<th>Group</th>
-				<th>Others</th>
-				<th>Administrators</th>
-		</thead>
-		<tbody>
+	<!-- The Modal -->
+	<div id="myModal" class="modal">
 
-			<tr>
-				<td>Add</td>
-				<td><input type="checkbox"></td>
-				<td><input type="checkbox"></td>
-				<td><input type="checkbox"></td>
-				<td><input type="checkbox"></td>
-
-			</tr>
-			<tr>
-				<td>Edit</td>
-				<td><input type="checkbox"></td>
-				<td><input type="checkbox"></td>
-				<td><input type="checkbox"></td>
-				<td><input type="checkbox"></td>
-
-			</tr>
-		</tbody>
-	</table>
+		<!-- Modal content -->
+		<div class="modal-content">
+			<center>
+				<h3 id="textToBeChanged">AAA</h3>
+				<table class="responsive-table-input-matrix">
+					<thead>
+						<tr>
+							<th></th>
+							<th>7:30-8:15</th>
+							<th>8:30-9:15</th>
+							<th>9:30-10:15</th>
+							<th>10:30-11:15</th>
+							<th>11:30-12:15</th>
+							<th>12:30-13:15</th>
+							<th>13:45-14:30</th>
+							<th>14:45-15:30</th>
+							<th>15:45-16:30</th>
+							<th>16:45-17:30</th>
+							<th>17:45-18:30</th>
+							<th>18:45-19:30</th>
+							<th>19:45-20:30</th>
+							<th>20:45-21:30</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Понеделник</td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+						</tr>
+						<tr>
+							<td>Вторник</td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+						</tr>
+						<tr>
+							<td>Сряда</td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+						</tr>
+						<tr>
+							<td>Четвъртък</td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+						</tr>
+						<tr>
+							<td>Петък</td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+							<td><input type="checkbox"></td>
+						</tr>
+					</tbody>
+				</table>
+			</center>
+		</div>
+	</div>
 	<br>
 	<br>
 	<br>
@@ -245,7 +366,8 @@ td, th {
 
 
 	<script>
-	
+		// Get the modal
+		var modal = document.getElementById('myModal');
 		window.onload = function load() {
 	
 			var allChosedTeachersID = [];
@@ -261,18 +383,18 @@ td, th {
 	
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
-			
+	
 				if (this.readyState == 4 && this.status == 200) {
 					var roomsForLectures = this.responseText;
 					console.log("Rooms: " + roomsForLectures);
-					
-					roomsForLect = JSON.parse(roomsForLectures);	
+	
+					roomsForLect = JSON.parse(roomsForLectures);
 				}
 			}
 			xhttp.open("GET", "/rooms/allByType?type=true", false);
 			xhttp.send();
 	
-		
+	
 			var xhttp = new XMLHttpRequest();
 			var teachers = null;
 			var teachersTable = document.getElementById('teachers');
@@ -288,61 +410,76 @@ td, th {
 						var currentId = allChosedTeachersID[j];
 	
 						for (var k = 0; k < teach.length; k++) (function(k) {
-							if (teach[k].id == currentId) {
-								teachersName = teach[k].name;
+								if (teach[k].id == currentId) {
+									teachersName = teach[k].name;
 	
 	
-								var tr = document.createElement('tr');
-								var tdNum = document.createElement('td');
-								tdNum.innerHTML = (j + 1);
+									var tr = document.createElement('tr');
+									var tdNum = document.createElement('td');
+									tdNum.innerHTML = (j + 1);
 	
-								var tdName = document.createElement('td');
-								tdName.innerHTML = teachersName;
-								
-								<!-- td -->
-								var tdDropDown = document.createElement('td');
-			
-								<!--td dropdown -->
-								var dropDown = document.createElement('div');
-								dropDown.className = "dropdown";
-			
-			
-								var dropDownContent = document.createElement('div');
-								dropDownContent.id = "dropDownCon"
-								dropDownContent.className = "dropdown-content";
-								
-								var button = document.createElement('button');
-								button.className = "dropbtn";
-								button.innerHTML = "Избор...";
-								
-								
-								for (p = 0; p < roomsForLect.length; p++) (function(p) {
-									var content = roomsForLect[p].id;
-									
-									var a = document.createElement('a');
-									a.innerHTML = content;
-								
-									a.onclick = function() {
-										button.innerHTML = content;
-										
+									var tdName = document.createElement('td');
+									tdName.innerHTML = teachersName;
+	
+									<!-- td -->
+									var tdDropDown = document.createElement('td');
+	
+									<!--td dropdown -->
+									var dropDown = document.createElement('div');
+									dropDown.className = "dropdown";
+	
+	
+									var dropDownContent = document.createElement('div');
+									dropDownContent.id = "dropDownCon"
+									dropDownContent.className = "dropdown-content";
+	
+									var button = document.createElement('button');
+									button.className = "dropbtn";
+									button.innerHTML = "Избор...";
+	
+	
+									for (p = 0; p < roomsForLect.length; p++) (function(p) {
+											var content = roomsForLect[p].id;
+	
+											var a = document.createElement('a');
+											a.innerHTML = content;
+	
+											a.onclick = function() {
+												button.innerHTML = content;
+	
+											}
+											dropDownContent.appendChild(a);
+										})(p);
+	
+									dropDown.appendChild(button);
+									dropDown.appendChild(dropDownContent);
+	
+	
+									tdDropDown.appendChild(dropDown);
+	
+									<!-- CHECK-BOX BUTTON -->
+	
+									var tdForCB = document.createElement('td');
+									var buttonCB = document.createElement('button');
+									buttonCB.className = "button2";
+									buttonCB.innerHTML = "Избор...";
+									buttonCB.onclick = function() {
+										document.getElementById("textToBeChanged").innerHTML=
+											"Моля, отбележете невъзможността за присъствие на " + tdName.innerHTML;
+										modal.style.display = "block";
 									}
-									dropDownContent.appendChild(a);
-								})(p);
-	
-								dropDown.appendChild(button);
-								dropDown.appendChild(dropDownContent);
 	
 	
-								tdDropDown.appendChild(dropDown);
-								
-								
-								tr.appendChild(tdNum);
-								tr.appendChild(tdName);
-								tr.appendChild(tdDropDown);
-								
-								teachersTable.appendChild(tr);
-							}
-						})(k);
+									tdForCB.appendChild(buttonCB);
+	
+									tr.appendChild(tdNum);
+									tr.appendChild(tdName);
+									tr.appendChild(tdDropDown);
+									tr.appendChild(tdForCB);
+	
+									teachersTable.appendChild(tr);
+								}
+							})(k);
 	
 					}
 	
