@@ -81,4 +81,21 @@ public class SQLTeachersHelper {
 		return;
 	}
 
+	public Teachers retrieveTeacherById(String getTeacherById, int id) throws SQLException {
+		Teachers retrievedTeachers = null;
+
+		PreparedStatement preparedStatement = conn.prepareStatement(getTeacherById);
+		preparedStatement.setInt(1, id);
+
+		ResultSet rs = preparedStatement.executeQuery();
+
+		while (rs.next()) {
+			String name = rs.getString("name");
+
+			retrievedTeachers = new Teachers(id, name);
+		}
+		return retrievedTeachers;
+		
+	}
+
 }

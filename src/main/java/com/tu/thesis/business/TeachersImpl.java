@@ -31,4 +31,8 @@ public class TeachersImpl {
 		sql.deleteTeacher(SQLConstants.DELETE_TEACHER_BY_ID, id);
 	}
 
+	public static Teachers retrieveTeacherById(int id) throws SQLException {
+		return sql.retrieveTeacherById(SQLConstants.GET_TEACHER_BY_ID, id);
+	}
+
 }

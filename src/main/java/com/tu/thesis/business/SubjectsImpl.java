@@ -21,6 +21,7 @@ public class SubjectsImpl {
 	public static List<Subjects> retrieveAllSubjectsBySemester(int id) throws ClassNotFoundException, SQLException {
 		return sql.retrieveAllSubjectsBySemester(SQLConstants.GET_ALL_SUBJECTS_BY_SEMESTERS, id);
 	}
+	
 
 	public static void insertSubjects(Subjects subject) throws ClassNotFoundException, SQLException {
 		sql.insertSubject(SQLConstants.INSERT_SUBJECT, subject);
@@ -28,6 +29,10 @@ public class SubjectsImpl {
 
 	public static void deleteSubjects(int id) throws ClassNotFoundException, SQLException {
 		sql.deleteSubject(SQLConstants.DELETE_SUBJECT_BY_ID, id);
+	}
+
+	public static Subjects retrieveSubjectById(int id) throws SQLException {
+		return sql.retrieveSubjectById(SQLConstants.GET_SUBJECTS_BY_ID, id);
 	}
 
 }

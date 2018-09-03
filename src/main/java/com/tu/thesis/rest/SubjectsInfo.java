@@ -29,6 +29,14 @@ public class SubjectsInfo {
 		return SubjectsImpl.retrieveAllSubjectsBySemester(id);
 	}
 
+	@RequestMapping(value = "/subjects/getById", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Subjects subjectsById(@RequestParam("id") int id)
+			throws ClassNotFoundException, SQLException {
+
+		return SubjectsImpl.retrieveSubjectById(id);
+	}
+
+	
 	@RequestMapping(value = "/subjects/add", method = RequestMethod.POST, produces = "application/json")
 	public void addSubjects(@RequestBody Subjects subjects) throws ClassNotFoundException, SQLException {
 

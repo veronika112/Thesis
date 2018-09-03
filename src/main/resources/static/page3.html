@@ -367,11 +367,14 @@ td, th {
 
 
 	<script>
+		// all teachers From Page 2
+		var allChosedTeachersID = [];
+	
 		// Get the modal
 		var modal = document.getElementById('myModal');
 		window.onload = function load() {
 	
-			var allChosedTeachersID = [];
+	
 	
 			for (var i = 0; i < Object.values(sessionStorage).length; i++) {
 				var temp = Object.values(sessionStorage)[i];
@@ -447,6 +450,7 @@ td, th {
 	
 											a.onclick = function() {
 												button.innerHTML = content;
+												sessionStorage.setItem("ROOM" + teach[k].id, content);
 	
 											}
 											dropDownContent.appendChild(a);
@@ -465,14 +469,14 @@ td, th {
 									buttonCB.className = "button2";
 									buttonCB.innerHTML = "Избор...";
 									buttonCB.onclick = function() {
-										
+	
 										console.log("current teacher ID: " + teach[k].id);
 										sessionStorage.setItem("currentTeacher", teach[k].id);
-										
+	
 										document.getElementById("textToBeChanged").innerHTML = "Моля, отбележете невъзможността за присъствие на " + tdName.innerHTML;
 										modal.style.display = "block";
 										buttonCB.innerHTML = "Избран";
-										this.disabled=true;
+										this.disabled = true;
 									}
 	
 	
@@ -498,17 +502,17 @@ td, th {
 	
 		function getTimetable() {
 			var checkedValue = [];
-			
+	
 			console.log("Clicked get Timetable");
 			var table = document.getElementById("tableForTimetable");
 			var trCont = table.children[1].children;
 			console.log(trCont);
-			for(var i=0; i<trCont.length; i++){
+			for (var i = 0; i < trCont.length; i++) {
 				var tdCont = trCont[i].children;
 				console.log(tdCont);
-				for(var j=1; j<tdCont.length; j++){
+				for (var j = 1; j < tdCont.length; j++) {
 					var currTd = tdCont[j].children[0];
-					if(currTd.checked){
+					if (currTd.checked) {
 						console.log("aaasasasasas " + currTd.value);
 						checkedValue.push(currTd.value);
 						currTd.checked = false;
@@ -518,23 +522,96 @@ td, th {
 			var currTID = sessionStorage.getItem("currentTeacher");
 			console.log(currTID);
 			sessionStorage.setItem("TEACHER" + currTID, checkedValue);
-			 modal.style.display = "none";
-			 checkedValue = [];
+			modal.style.display = "none";
+			checkedValue = [];
 		}
-		
-		
-		function generate(){
-			for(var i=0; i<sessionStorage.length; i++) {
-			    var key = sessionStorage.key(i);
-			    var value = sessionStorage[key];
-			    console.log(key + " => " + value);
+	
+	
+		function generate() {
+			for (var i = 0; i < sessionStorage.length; i++) {
+				var key = sessionStorage.key(i);
+				var value = sessionStorage[key];
+				console.log(key + " => " + value);
 			}
-			
+	
+			for (var z = 0; z < allChosedTeachersID.length; z++) {
+				var tempTeacherId = allChosedTeachersID[z]; // id-to na prepodawatelq
+				// build-nahme zalata
+				var chosedRoom = sessionStorage.getItem("ROOM" + tempTeacherId);
+				var room = new Object();
+				room.id = chosedRoom;
+				room.isLecture = true;
+				var jsonRoom = JSON.stringify(room);
+	
+				//build-wame subject
+				var chosedSubjectId = null;
+				for (var h = 0; h < Object.values(sessionStorage).length; h++) {
+					var temp = Object.values(sessionStorage)[h];
+					if (temp.indexOf(";" + tempTeacherId) != -1) {
+	
+						chosedSubjectId = temp.substring((temp.indexOf(';') - 1), temp.indexOf(';'));
+						console.log(chosedSubjectId);
+					}
+				}
+				var jsonSubject = null;
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+	
+					if (this.readyState == 4 && this.status == 200) {
+						jsonSubject = this.responseText;
+	
+					}
+				}
+				xhttp.open("GET", "/subjects/getById?id=" + chosedSubjectId, false);
+				xhttp.send();
+	
+				// buildwame isSet
+				var isSet = new Object();
+				isSet.isSet = false;
+				var jsonIsSet = JSON.stringify(isSet);
+	
+				var chosedTimeSlots = sessionStorage.getItem("TEACHER" + tempTeacherId);
+	
+				var unavailableTimes = new Object();
+				unavailableTimes.unavailableTimes = chosedTimeSlots;
+				var jsonUnavTime = JSON.stringify(chosedTimeSlots);
+	
+				//build-wame teachers
+				var jsonTeacher = null;
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+	
+					if (this.readyState == 4 && this.status == 200) {
+						jsonTeacher = this.responseText;
+	
+					}
+				}
+				xhttp.open("GET", "/teachers/byId?id=" + tempTeacherId, false);
+				xhttp.send();
+	
+				console.log("Room: " + jsonRoom);
+				console.log("JsonIsSet" + jsonIsSet);
+				console.log("JsonUnavTime" + jsonUnavTime);
+				console.log("JsonSubject" + jsonSubject);
+				console.log("JsonTeacher" + jsonTeacher);
+	
+				var oneObject = "{\"room\":" + jsonRoom + " , "
+					+ " \"subject\":" + jsonSubject + ", "
+					+ " \"teacher\":" + jsonTeacher + " , "
+					+ " \"availableTime\":" + jsonUnavTime + ", "
+					+ jsonIsSet;
+	
+	
+				console.log("ONE OBJECT: " + oneObject);
+	
+			}
+	
+	
 			sessionStorage.clear();
-			
+	
 			var url = "/";
-			
-			
+	
+	
 		}
 	</script>
 </body>

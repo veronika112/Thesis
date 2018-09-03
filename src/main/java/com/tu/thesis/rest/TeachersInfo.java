@@ -21,6 +21,12 @@ public class TeachersInfo {
 
 		return TeachersImpl.retrieveAllTeachers();
 	}
+	
+	@RequestMapping(value = "/teachers/byId", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Teachers teacherById(@RequestParam("id") int id) throws ClassNotFoundException, SQLException {
+
+		return TeachersImpl.retrieveTeacherById(id);
+	}
 
 	@RequestMapping(value = "/teachers/bySubject", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Teachers> teachersBySubject(@RequestParam("id") int id,

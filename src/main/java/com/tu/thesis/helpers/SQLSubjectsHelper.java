@@ -90,4 +90,24 @@ public class SQLSubjectsHelper {
 		return;
 	}
 
+	public Subjects retrieveSubjectById(String getSubjectsById, int id) throws SQLException {
+		Subjects retrievedSubjects = null;
+
+		PreparedStatement preparedStatement = conn.prepareStatement(getSubjectsById);
+		preparedStatement.setInt(1, id);
+
+		ResultSet rs = preparedStatement.executeQuery();
+
+		while (rs.next()) {
+			
+			int semId = rs.getInt("sem_id");
+			String name = rs.getString("name");
+			int lectureNum = rs.getInt("lectures_num");
+			int exercisesNum = rs.getInt("exercises_num");
+
+			retrievedSubjects = new Subjects(id, semId, name, lectureNum, exercisesNum);
+		}
+		return retrievedSubjects;
+	}
+
 }
