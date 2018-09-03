@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gson.Gson;
 import com.tu.thesis.business.OtherImpl;
 import com.tu.thesis.business.RoomsImpl;
 import com.tu.thesis.entity.Rooms;
@@ -21,6 +22,7 @@ import com.tu.thesis.helpers.CSVHelper;
 public class GeneratorImpl {
 
 	List<UniTimeSlots> timeSlots = OtherImpl.retrieveAllTimeSlots();
+
 
 	Map<DAYS, BusinessObject[][]> schedule = new HashMap<>(); // krainiqt sedmichen razpis
 
@@ -1271,10 +1273,11 @@ public class GeneratorImpl {
 		lecturesConstraints.add(obj6);
 		lecturesConstraints.add(obj7);
 		lecturesConstraints.add(obj8);
-		// lecturesConstraints.add(obj9);
-		// lecturesConstraints.add(obj10);
-		// lecturesConstraints.add(obj11);
 
+		
+		String json = new Gson().toJson(lecturesConstraints);
+		System.out.println("GOOGLE? " + json);
+		
 		return lecturesConstraints;
 	}
 
