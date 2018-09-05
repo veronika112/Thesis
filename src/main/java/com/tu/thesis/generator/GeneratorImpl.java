@@ -25,14 +25,14 @@ public class GeneratorImpl {
 	public static List<UniTimeSlots> timeSlots = OtherImpl.retrieveAllTimeSlots();
 
 
-	static Map<DAYS, BusinessObject[][]> schedule = new HashMap<>(); // krainiqt sedmichen razpis
+	Map<DAYS, BusinessObject[][]> schedule = new HashMap<>(); // krainiqt sedmichen razpis
 
 	// s tezi 2 lista durjim lekciite, doakto gi obrabotwame
-	static List<FEObjectForLecureGeneration> forFurtherProcessLectures = new ArrayList<>(); // struktura, w koiqto pazim
+	List<FEObjectForLecureGeneration> forFurtherProcessLectures = new ArrayList<>(); // struktura, w koiqto pazim
 																						// wremenno
 	// izwadenite predmeti pri razmestwane
 
-	static List<FEObjectForLecureGeneration> constraintsLectures = new ArrayList<>(); // polucheniq ot FE spisak na predmeti i
+	List<FEObjectForLecureGeneration> constraintsLectures = new ArrayList<>(); // polucheniq ot FE spisak na predmeti i
 																				// lektori s tehnite chasowi pretencii
 
 	// izpolzwame za uprajneniq - za wsqka grupa powtarqme logikata za lekciite
@@ -40,17 +40,17 @@ public class GeneratorImpl {
 																									// pazim
 	// wremenno izwadenite predmeti pri razmestwane
 
-	static Map<Integer, List<FEObjectForLecureGeneration>> constraintsExercises = new HashMap<>(); // polucheniq ot FE spisak
+	Map<Integer, List<FEObjectForLecureGeneration>> constraintsExercises = new HashMap<>(); // polucheniq ot FE spisak
 																							// na predmeti i
 	// lektori s tehnite chasowi pretencii
 
-	static Map<Teachers, Map<DAYS, Set<UniTimeSlots>>> allTeachers = new HashMap<>(); // spisak ot wsichki lektori s tehnite
+	Map<Teachers, Map<DAYS, Set<UniTimeSlots>>> allTeachers = new HashMap<>(); // spisak ot wsichki lektori s tehnite
 																				// chasowi pretencii
 
 	// zalite za uprajneniq
-	static Map<DAYS, Map<UniTimeSlots, List<Rooms>>> roomsForEx = new HashMap<>();
+	Map<DAYS, Map<UniTimeSlots, List<Rooms>>> roomsForEx = new HashMap<>();
 
-	public static void putRooms() throws CloneNotSupportedException, ClassNotFoundException, SQLException {
+	public void putRooms() throws CloneNotSupportedException, ClassNotFoundException, SQLException {
 
 		Map<UniTimeSlots, List<Rooms>> slots = new HashMap<>();
 
@@ -80,7 +80,7 @@ public class GeneratorImpl {
 	/**
 	 * popalwame spisaka na prepodawatelite
 	 */
-	public static void evaluateAllTeachersTimesConstraints() {
+	public void evaluateAllTeachersTimesConstraints() {
 		for (FEObjectForLecureGeneration l : constraintsLectures) {
 			allTeachers.put(l.getTeacher(), l.getAvailableTime());
 		}
@@ -119,21 +119,15 @@ public class GeneratorImpl {
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public static void computeSchedule(int groups, String jsonStructure)
+	public void computeSchedule(int groups, String jsonStructure)
 			throws IOException, CloneNotSupportedException, ClassNotFoundException, SQLException {
 
-		System.out.println("GROUPS!!!!!!!!!!!!11 " + groups);
-		System.out.println("JSON!!!!!!!!!!!!11 " + jsonStructure);
-		
-		
-	//	List<FEObjectForLecureGeneration> takenfromFe = ConvertToObjectForLecture.convertor(jsonStructure);
-		List<FEObjectForLecureGeneration> takenfromFe = generateConstraints();
-		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++" + takenfromFe.toString());
-		
-		constraintsLectures.addAll(takenfromFe); // dobawqne na danni
+		List<FEObjectForLecureGeneration> c = ConvertToObjectForLecture.convertor(jsonStructure); 
+		//List<FEObjectForLecureGeneration> c = generateConstraints(); 
+		constraintsLectures.addAll(c); // dobawqne na danni
 		// pulnim uprajneniqta za wsqka grupa
 		for (int i = 0; i < groups; i++) {
-			constraintsExercises.put(i, takenfromFe);
+			constraintsExercises.put(i, new ArrayList<FEObjectForLecureGeneration>(c));
 		}
 		evaluateAllTeachersTimesConstraints();
 		putRooms();
@@ -156,7 +150,7 @@ public class GeneratorImpl {
 	 * 
 	 * @param groups
 	 */
-	private static void computeExercisesSchedule(int groups) {
+	private void computeExercisesSchedule(int groups) {
 
 		for (int i = 0; i < groups; i++) {
 			System.out.println("GROUPS:" + i);
@@ -190,7 +184,7 @@ public class GeneratorImpl {
 	/**
 	 * zapochwame razmestwaneto na lekciite
 	 */
-	private static void tryToReconfigureSchedule(int groups) {
+	private void tryToReconfigureSchedule(int groups) {
 
 		int numOfTriesToPutLectures = 0;
 		while (numOfTriesToPutLectures < 10) {
@@ -330,7 +324,7 @@ public class GeneratorImpl {
 
 	}
 
-	private static boolean addLectures(BusinessObject[] scheduleToday, int tempId, FEObjectForLecureGeneration tempLeftOver,
+	private boolean addLectures(BusinessObject[] scheduleToday, int tempId, FEObjectForLecureGeneration tempLeftOver,
 			List<FEObjectForLecureGeneration> toBeRemovedWhenSet, boolean isThisLectureSEt) {
 
 		int sizeOfTempLeftOver = tempLeftOver.getSubject().getLecture_num(); // razmera mu
@@ -361,7 +355,7 @@ public class GeneratorImpl {
 		return isThisLectureSEt;
 	}
 
-	private static boolean swapLectures(BusinessObject[] scheduleToday, int tempId, FEObjectForLecureGeneration tempLeftOver,
+	private boolean swapLectures(BusinessObject[] scheduleToday, int tempId, FEObjectForLecureGeneration tempLeftOver,
 			DAYS d, List<FEObjectForLecureGeneration> toBeRemovedWhenSet, boolean isThisLectureSEt) {
 
 		BusinessObject forSwap = null;
@@ -424,7 +418,7 @@ public class GeneratorImpl {
 	 * 
 	 * @param groups
 	 */
-	private static void computeLecturesSchedule(int groups) {
+	private void computeLecturesSchedule(int groups) {
 
 		// fill in time table for lectures
 		for (DAYS d : DAYS.values()) {
@@ -468,7 +462,7 @@ public class GeneratorImpl {
 		}
 	}
 
-	private static BusinessObject[] addEachLectureToSchedule(FEObjectForLecureGeneration o, DAYS d, BusinessObject[] obj,
+	private BusinessObject[] addEachLectureToSchedule(FEObjectForLecureGeneration o, DAYS d, BusinessObject[] obj,
 			List<FEObjectForLecureGeneration> toBeRemovedWhenSet, boolean isLecture, BusinessObject[][] currentProgram,
 			int i) {
 
@@ -557,7 +551,7 @@ public class GeneratorImpl {
 
 	}
 
-	private static int getNumberOfLecturesForDay(BusinessObject[] scheduleToday) {
+	private int getNumberOfLecturesForDay(BusinessObject[] scheduleToday) {
 		Set<String> lectures = new HashSet<>();
 
 		for (int i = 0; i < scheduleToday.length; i++) {
@@ -569,7 +563,7 @@ public class GeneratorImpl {
 		return lectures.size();
 	}
 
-	private static int getNumberOfExercisesForDay(BusinessObject[] scheduleToday) {
+	private int getNumberOfExercisesForDay(BusinessObject[] scheduleToday) {
 		Set<String> lectures = new HashSet<>();
 
 		for (int i = 0; i < scheduleToday.length; i++) {
@@ -581,7 +575,7 @@ public class GeneratorImpl {
 		return lectures.size();
 	}
 
-	private static List<FEObjectForLecureGeneration> generateConstraints() {
+	private List<FEObjectForLecureGeneration> generateConstraints() {
 		// constraint for 1 teacher for 1 subject and for 1 room
 		Rooms room = new Rooms(1154, true);
 		Subjects subject = new Subjects(1, 1, "Висша математика – I", 2, 2);

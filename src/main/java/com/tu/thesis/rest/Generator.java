@@ -22,7 +22,7 @@ public class Generator {
 	@RequestMapping(value = "/generate", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody ResponseEntity generate(@RequestParam("groups") int groups, @RequestBody() String jsonStructure) throws ClassNotFoundException, SQLException, IOException, CloneNotSupportedException {
 
-		GeneratorImpl.computeSchedule(groups, jsonStructure);
+		new GeneratorImpl().computeSchedule(groups, jsonStructure);
 		
 		return new ResponseEntity(HttpStatus.OK);
 	}
