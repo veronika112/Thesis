@@ -528,6 +528,9 @@ td, th {
 	
 	
 		function generate() {
+			
+			var jsonStructure = "";
+			
 			for (var i = 0; i < sessionStorage.length; i++) {
 				var key = sessionStorage.key(i);
 				var value = sessionStorage[key];
@@ -566,8 +569,7 @@ td, th {
 				xhttp.send();
 	
 				// buildwame isSet
-				var isSet = new Object();
-				isSet.isSet = false;
+				var isSet = false;
 				var jsonIsSet = JSON.stringify(isSet);
 	
 				var chosedTimeSlots = sessionStorage.getItem("TEACHER" + tempTeacherId);
@@ -595,18 +597,31 @@ td, th {
 				console.log("JsonSubject" + jsonSubject);
 				console.log("JsonTeacher" + jsonTeacher);
 	
-				var oneObject = "{\"room\":" + jsonRoom + " , "
-					+ " \"subject\":" + jsonSubject + ", "
-					+ " \"teacher\":" + jsonTeacher + " , "
-					+ " \"availableTime\":" + jsonUnavTime + ", "
-					+ jsonIsSet;
+				var oneObject = "{\"room\":" + jsonRoom + ","
+					+ " \"subject\":" + jsonSubject + ","
+					+ " \"teacher\":" + jsonTeacher + ","
+					+ " \"availableTime\":" + jsonUnavTime + ","
+					+ "\"isSet\":false}}";
 	
 	
 				console.log("ONE OBJECT: " + oneObject);
 	
+				jsonStructure = jsonStructure + "," + oneObject;
 			}
-	
-	
+			
+			console.log(jsonStructure);
+			
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+
+				if (this.readyState == 4 && this.status == 200) {
+					response = this.responseText;
+					console.log("THE RESPONSE: " + response);
+				}
+			}
+			xhttp.open("POST", "/generate?groups=" + sessionStorage.getItem("GROUPS"), false);
+			xhttp.send(jsonStructure);
+			
 			sessionStorage.clear();
 	
 			var url = "/";

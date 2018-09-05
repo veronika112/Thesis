@@ -19,6 +19,12 @@ public class UniTimeSlots {
 	}
 
 	@Override
+	public String toString() {
+		return "{ \"id\":" + id + ", \"name\":\"" + name + "\"}";
+	}
+	
+	
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;

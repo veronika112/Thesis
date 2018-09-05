@@ -159,6 +159,7 @@
 			var semesterId = urlParams.get('semesterId');
 			semesterIdFromPage1 = semesterId;
 			numGroupsFromPage1 = urlParams.get('groups');
+			sessionStorage.setItem("GROUPS", numGroupsFromPage1);
 			//	console.log(urlParams);
 	
 			document.getElementById("h2").innerHTML = "Списък от предмети за семестър №" + (parseInt(semesterId, 10) + 1) + " за специалност ИТИ:";
