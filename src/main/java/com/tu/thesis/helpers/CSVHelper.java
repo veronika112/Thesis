@@ -2,6 +2,7 @@ package com.tu.thesis.helpers;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -29,7 +30,38 @@ public class CSVHelper {
 
 		Map<DAYS, BusinessObject[][]> theMap = new TreeMap<>(schedule);
 
-		List<UniTimeSlots> timeSlots = OtherImpl.retrieveAllTimeSlots();
+		List<UniTimeSlots> timeSlots = new ArrayList<>();
+		{
+			UniTimeSlots uniTimeSlots = new UniTimeSlots(1, "07:30");
+			UniTimeSlots uniTimeSlots1 = new UniTimeSlots(2, "08:30");
+			UniTimeSlots uniTimeSlots2 = new UniTimeSlots(3, "09:30");
+			UniTimeSlots uniTimeSlots3 = new UniTimeSlots(4, "10:30");
+			UniTimeSlots uniTimeSlots4 = new UniTimeSlots(5, "11:30");
+			UniTimeSlots uniTimeSlots5 = new UniTimeSlots(6, "12:30");
+			UniTimeSlots uniTimeSlots6 = new UniTimeSlots(7, "13:45");
+			UniTimeSlots uniTimeSlots7 = new UniTimeSlots(8, "14:45");
+			UniTimeSlots uniTimeSlots8 = new UniTimeSlots(9, "15:45");
+			UniTimeSlots uniTimeSlots9 = new UniTimeSlots(10, "16:45");
+			UniTimeSlots uniTimeSlots10 = new UniTimeSlots(11, "17:45");
+			UniTimeSlots uniTimeSlots11 = new UniTimeSlots(12, "18:45");
+			UniTimeSlots uniTimeSlots12 = new UniTimeSlots(13, "19:45");
+			UniTimeSlots uniTimeSlots13 = new UniTimeSlots(12, "20:45");
+
+			timeSlots.add(uniTimeSlots);
+			timeSlots.add(uniTimeSlots1);
+			timeSlots.add(uniTimeSlots2);
+			timeSlots.add(uniTimeSlots3);
+			timeSlots.add(uniTimeSlots4);
+			timeSlots.add(uniTimeSlots5);
+			timeSlots.add(uniTimeSlots6);
+			timeSlots.add(uniTimeSlots7);
+			timeSlots.add(uniTimeSlots8);
+			timeSlots.add(uniTimeSlots9);
+			timeSlots.add(uniTimeSlots10);
+			timeSlots.add(uniTimeSlots11);
+			timeSlots.add(uniTimeSlots12);
+			timeSlots.add(uniTimeSlots13);
+		}
 		timeSlots.add(0, new UniTimeSlots(20, ""));
 
 		Workbook workbook = new XSSFWorkbook();

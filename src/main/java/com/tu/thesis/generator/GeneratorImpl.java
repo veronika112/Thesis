@@ -21,8 +21,38 @@ import com.tu.thesis.helpers.CSVHelper;
 
 public class GeneratorImpl {
 
-	List<UniTimeSlots> timeSlots = OtherImpl.retrieveAllTimeSlots();
+    List<UniTimeSlots> timeSlots = new ArrayList<>();
+    {
+        UniTimeSlots uniTimeSlots = new UniTimeSlots(1, "07:30");
+        UniTimeSlots uniTimeSlots1 = new UniTimeSlots(2, "08:30");
+        UniTimeSlots uniTimeSlots2 = new UniTimeSlots(3, "09:30");
+        UniTimeSlots uniTimeSlots3 = new UniTimeSlots(4, "10:30");
+        UniTimeSlots uniTimeSlots4 = new UniTimeSlots(5, "11:30");
+        UniTimeSlots uniTimeSlots5 = new UniTimeSlots(6, "12:30");
+        UniTimeSlots uniTimeSlots6 = new UniTimeSlots(7, "13:45");
+        UniTimeSlots uniTimeSlots7 = new UniTimeSlots(8, "14:45");
+        UniTimeSlots uniTimeSlots8 = new UniTimeSlots(9, "15:45");
+        UniTimeSlots uniTimeSlots9 = new UniTimeSlots(10, "16:45");
+        UniTimeSlots uniTimeSlots10 = new UniTimeSlots(11, "17:45");
+        UniTimeSlots uniTimeSlots11 = new UniTimeSlots(12, "18:45");
+        UniTimeSlots uniTimeSlots12 = new UniTimeSlots(13, "19:45");
+        UniTimeSlots uniTimeSlots13 = new UniTimeSlots(12, "20:45");
 
+        timeSlots.add(uniTimeSlots);
+        timeSlots.add(uniTimeSlots1);
+        timeSlots.add(uniTimeSlots2);
+        timeSlots.add(uniTimeSlots3);
+        timeSlots.add(uniTimeSlots4);
+        timeSlots.add(uniTimeSlots5);
+        timeSlots.add(uniTimeSlots6);
+        timeSlots.add(uniTimeSlots7);
+        timeSlots.add(uniTimeSlots8);
+        timeSlots.add(uniTimeSlots9);
+        timeSlots.add(uniTimeSlots10);
+        timeSlots.add(uniTimeSlots11);
+        timeSlots.add(uniTimeSlots12);
+        timeSlots.add(uniTimeSlots13);
+    }
 
 	Map<DAYS, BusinessObject[][]> schedule = new HashMap<>(); // krainiqt sedmichen razpis
 
@@ -53,7 +83,22 @@ public class GeneratorImpl {
 
 		Map<UniTimeSlots, List<Rooms>> slots = new HashMap<>();
 
-		List<Rooms> allExercisesRooms = RoomsImpl.retrieveAllRooms();
+//		List<Rooms> allExercisesRooms = RoomsImpl.retrieveAllRooms();
+
+		Rooms room = new Rooms(1151, true);
+		Rooms room1 = new Rooms(1311, false);
+		Rooms room2 = new Rooms(1152, true);
+		Rooms room3 = new Rooms(1312, false);
+		Rooms room4 = new Rooms(1154, true);
+		Rooms room5 = new Rooms(1314, false);
+
+		List<Rooms> allExercisesRooms = new ArrayList<>();
+		allExercisesRooms.add(room);
+		allExercisesRooms.add(room1);
+		allExercisesRooms.add(room2);
+		allExercisesRooms.add(room3);
+		allExercisesRooms.add(room4);
+		allExercisesRooms.add(room5);
 
 		for (UniTimeSlots uts : timeSlots) {
 
@@ -120,10 +165,15 @@ public class GeneratorImpl {
 	public void computeSchedule(int groups)
 			throws IOException, CloneNotSupportedException, ClassNotFoundException, SQLException {
 
+		List<FEObjectForLecureGeneration> l = new ArrayList<>(generateConstraints());
+//		List<FEObjectForLecureGeneration> l1 = new ArrayList<>(generateConstraints());
 		constraintsLectures.addAll(generateConstraints()); // dobawqne na danni
 		// pulnim uprajneniqta za wsqka grupa
+
+		// ETO TUKA E PROMQNATA
 		for (int i = 0; i < groups; i++) {
-			constraintsExercises.put(i, generateConstraints());
+			List<FEObjectForLecureGeneration> l1 = new ArrayList<>(generateConstraints());
+			constraintsExercises.put(i, l1);
 		}
 		evaluateAllTeachersTimesConstraints();
 		putRooms();
@@ -137,7 +187,7 @@ public class GeneratorImpl {
 		// razpredelqne na uprajneniq
 		computeExercisesSchedule(groups);
 
-		CSVHelper.exportDataToExcel("C:\\Users\\User\\Desktop\\program.xlsx", schedule);
+		CSVHelper.exportDataToExcel("C:\\Users\\Hrisi\\Desktop\\program.xlsx", schedule);
 	}
 
 	/**
