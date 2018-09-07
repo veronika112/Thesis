@@ -293,7 +293,7 @@ td, th {
 							<td><input value="17" type="checkbox"></td>
 							<td><input value="18" type="checkbox"></td>
 							<td><input value="19" type="checkbox"></td>
-							<td><input value="10" type="checkbox"></td>
+							<td><input value="110" type="checkbox"></td>
 							<td><input value="111" type="checkbox"></td>
 							<td><input value="112" type="checkbox"></td>
 							<td><input value="113" type="checkbox"></td>
@@ -552,10 +552,12 @@ td, th {
 					var temp = Object.values(sessionStorage)[h];
 					if (temp.indexOf(";" + tempTeacherId) != -1) {
 	
-						chosedSubjectId = temp.substring((temp.indexOf(';') - 1), temp.indexOf(';'));
+						chosedSubjectId = temp.substring(0, temp.indexOf(';'));
 						console.log(chosedSubjectId);
 					}
 				}
+				
+				console.log("*********************** SUBJECT ID: " + chosedSubjectId);
 				var jsonSubject = null;
 				var xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = function() {
@@ -623,7 +625,8 @@ td, th {
 			xhttp.send(jsonStructure);
 			
 			sessionStorage.clear();
-	
+			
+			alert("Генерираната програма е записана на Desktop!");
 			var url = "/";
 	
 	

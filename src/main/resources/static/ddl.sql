@@ -19,7 +19,6 @@ CREATE TABLE UniTimeSlots(
 	name VARCHAR NOT NULL
 );
 
-DROP TABLE UniTime;
 
 
 CREATE TABLE Teachers(
