@@ -55,6 +55,7 @@ public class GeneratorImpl {
 		Map<UniTimeSlots, List<Rooms>> slots = new HashMap<>();
 
 		List<Rooms> allExercisesRooms = RoomsImpl.retrieveAllRooms();
+	//	List<Rooms> allExercisesRooms = RoomsImpl.retrieveAllRooms();
 
 		for (UniTimeSlots uts : timeSlots) {
 
